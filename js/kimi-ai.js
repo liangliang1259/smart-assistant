@@ -2,7 +2,7 @@
 
 // Kimi API配置
 const KIMI_API_CONFIG = {
-    API_KEY: "YOUR_KIMI_API_KEY", // 请替换为你的实际API密钥
+    API_KEY: "sk-Fi7lT2mDS3HqFqyQhCZl3CAff1ccwFPBDEc4enu9YBQ0FZgg", // 请替换为你的实际API密钥
     API_ENDPOINT: "https://api.moonshot.cn/v1/chat/completions",
     MODEL: "moonshot-v1-8k" // Kimi的模型名称
 };
