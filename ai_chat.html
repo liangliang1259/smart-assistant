@@ -338,31 +338,30 @@
                 sendButton.addEventListener('click', function() {
                     const message = inputField.textContent.trim();
                     if (message && message !== '输入消息...') {
-                        // 发送用户消息
-                        if (typeof sendUserMessage === 'function') {
-                            sendUserMessage(message);
-                            // 清空输入框
-                            inputField.textContent = '';
-                        } else {
-                            console.error("sendUserMessage函数不存在");
-                        }
+                        // 调用 Kimi AI 处理消息
+                        processMessageWithKimi(message);
+                        // 清空输入框
+                        inputField.textContent = '';
                     }
                 });
                 
+                // 添加回车发送功能
                 inputField.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
                         const message = this.textContent.trim();
                         if (message && message !== '输入消息...') {
-                            // 发送用户消息
-                            if (typeof sendUserMessage === 'function') {
-                                sendUserMessage(message);
-                                // 清空输入框
-                                this.textContent = '';
-                            } else {
-                                console.error("sendUserMessage函数不存在");
-                            }
+                            processMessageWithKimi(message);
+                            this.textContent = '';
                         }
+                    }
+                });
+                
+                // 快速回复点击事件
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('quick-reply')) {
+                        const message = e.target.textContent;
+                        processMessageWithKimi(message);
                     }
                 });
             } else {

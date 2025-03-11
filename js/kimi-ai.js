@@ -150,55 +150,50 @@ function removeTypingIndicator() {
     }
 }
 
-// 使用Kimi AI处理消息
+// 处理消息并调用 Kimi AI
 function processMessageWithKimi(message) {
-    // 获取当前职位信息
-    let jobContext = "";
+    // 首先显示用户消息
+    sendUserMessage(message);
+    
+    // 显示 AI 正在输入的状态
+    showTypingIndicator();
+    
+    // 获取当前职位上下文
     const urlParams = new URLSearchParams(window.location.search);
     const jobId = urlParams.get('jobId');
+    let jobContext = "";
     
     if (jobId && window.jobsData) {
-        const job = window.jobsData.find(j => j.id === jobId);
+        const job = window.jobsData.find(j => j.id === parseInt(jobId));
         if (job) {
             jobContext = `用户正在咨询的职位信息：
 职位名称: ${job.title}
 公司: ${job.company}
 地点: ${job.location}
 薪资: ${job.salary}
-要求: ${job.requirements ? job.requirements.join(', ') : '无特殊要求'}
-福利: ${job.benefits ? job.benefits.join(', ') : '暂无详细福利信息'}
-`;
+要求: ${job.requirements}
+福利: ${job.benefits}`;
         }
     }
     
-    // 调用Kimi API
+    // 调用 Kimi API
     callKimiAPI(message, jobContext)
         .then(response => {
             // 移除输入指示器
             removeTypingIndicator();
             
-            // 处理API响应
             if (response && response.choices && response.choices.length > 0) {
                 const aiMessage = response.choices[0].message.content;
-                
-                // 添加到聊天历史
-                chatHistory.push({
-                    role: "assistant",
-                    content: aiMessage
-                });
                 
                 // 生成快速回复选项
                 const quickReplies = generateQuickRepliesBasedOnContext(message, aiMessage);
                 
-                // 显示AI回复
+                // 显示 AI 回复
                 showAIReply(aiMessage, quickReplies);
-            } else {
-                // 处理API错误
-                showAIReply("抱歉，我暂时无法回答您的问题。请稍后再试。", ["重新提问", "联系客服"]);
             }
         })
         .catch(error => {
-            console.error("Kimi API调用失败:", error);
+            console.error("Kimi API 调用失败:", error);
             removeTypingIndicator();
             
             // 降级到本地回复逻辑
