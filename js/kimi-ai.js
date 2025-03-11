@@ -1,4 +1,5 @@
-// kimi-ai.js - Kimi AI聊天功能模块
+// kimi-ai.js - Kimi AI聊天功能模块 - 版本1.0.1 (2025-03-11)
+console.log("加载Kimi AI聊天功能模块 - 版本1.0.1");
 
 // Kimi API配置
 const KIMI_API_CONFIG = {
