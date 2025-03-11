@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职位列表 - 蓝领招聘</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px;
+        }
+        .status-bar {
+            background-color: #000;
+            color: white;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+        .search-box {
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border-radius: 20px;
+            border: 1px solid #e0e0e0;
+            background-color: #f5f5f5;
+            font-size: 14px;
+        }
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        .job-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .job-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .salary {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #f0f7ff;
+            color: #1677ff;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        .hot-tag {
+            background-color: #fff2e8;
+            color: #fa541c;
+        }
+        .filter-scroll {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .filter-item {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: white;
+            border-radius: 16px;
+            margin-right: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        .filter-item.active {
+            background-color: #1677ff;
+            color: white;
+        }
+        .search-history {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .history-item {
+            display: inline-block;
+            background-color: #f5f5f5;
+            border-radius: 16px;
+            padding: 6px 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        .hot-search {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 状态栏 -->
+    <div class="status-bar">
+        <div class="status-time">15:48</div>
+        <div>
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi ml-2"></i>
+            <i class="fas fa-battery-full ml-2"></i>
+        </div>
+    </div>
+
+    <!-- 头部搜索 -->
+    <div class="bg-white p-4 sticky top-0 z-10 shadow-sm">
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="搜索职位、公司、地点">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+    </div>
+
+    <!-- 筛选条件 -->
+    <div class="filter-scroll px-4 bg-white">
+        <div class="filter-item active">推荐</div>
+        <div class="filter-item">最新</div>
+        <div class="filter-item">高薪</div>
+        <div class="filter-item">五险一金</div>
+        <div class="filter-item">包吃住</div>
+        <div class="filter-item">双休</div>
+        <div class="filter-item">无经验要求</div>
+        <div class="filter-item">日结</div>
+    </div>
+
+    <!-- 搜索历史 -->
+    <div id="searchHistorySection" class="px-4 mt-4" style="display: none;">
+        <div class="search-history">
+            <div class="flex justify-between items-center mb-3">
+                <div class="font-medium">搜索历史</div>
+                <i class="fas fa-trash-alt text-gray-400"></i>
+            </div>
+            <div id="searchHistoryContainer">
+                <!-- 搜索历史将通过JavaScript动态添加 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 热门搜索 -->
+    <div id="hotSearchSection" class="px-4 mt-4" style="display: none;">
+        <div class="hot-search">
+            <div class="font-medium mb-3">热门搜索</div>
+            <div id="hotSearchContainer">
+                <!-- 热门搜索将通过JavaScript动态添加 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 职位列表 -->
+    <div id="jobListContainer" class="p-4">
+        <!-- 职位卡片将通过JavaScript动态添加 -->
+    </div>
+
+    <!-- 引入JavaScript -->
+    <script src="js/job-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新状态栏时间
+            const statusTimeElement = document.querySelector('.status-time');
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            statusTimeElement.textContent = timeString;
+            
+            // 获取DOM元素
+            const jobListContainer = document.getElementById('jobListContainer');
+            const searchInput = document.querySelector('.search-input');
+            const searchHistorySection = document.getElementById('searchHistorySection');
+            const hotSearchSection = document.getElementById('hotSearchSection');
+            const searchHistoryContainer = document.getElementById('searchHistoryContainer');
+            const hotSearchContainer = document.getElementById('hotSearchContainer');
+            
+            // 渲染职位列表
+            function renderJobList(jobs) {
+                jobListContainer.innerHTML = '';
+                
+                if (!jobs || jobs.length === 0) {
+                    jobListContainer.innerHTML = '<div class="text-center py-8 text-gray-500">没有找到匹配的职位</div>';
+                    return;
+                }
+                
+                jobs.forEach(job => {
+                    const jobCard = document.createElement('div');
+                    jobCard.className = 'job-card';
+                    jobCard.setAttribute('data-job-id', job.id);
+                    
+                    const tagsHTML = job.tags.map(tag => 
+                        `<span class="tag">${tag}</span>`
+                    ).join('');
+                    
+                    const hotBadge = job.hot ? '<span class="tag hot-tag">急聘</span>' : '';
+                    
+                    jobCard.innerHTML = `
+                        <div class="flex">
+                            <img src="${job.logo}" class="company-logo">
+                            <div class="ml-3 flex-1">
+                                <div class="flex justify-between">
+                                    <div class="job-title">${job.title}</div>
+                                    <div class="salary">${job.salary}</div>
+                                </div>
+                                <div class="text-gray-600 text-sm mt-1">${job.company}</div>
+                                <div class="text-gray-500 text-sm mt-1">${job.location}</div>
+                                <div class="mt-2">
+                                    ${hotBadge}
+                                    ${tagsHTML}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // 添加点击事件
+                    jobCard.addEventListener('click', function() {
+                        // 跳转到职位详情页
+                        window.parent.postMessage({ 
+                            action: 'navigate', 
+                            page: 'job_detail.html',
+                            jobId: job.id
+                        }, '*');
+                    });
+                    
+                    jobListContainer.appendChild(jobCard);
+                });
+            }
+            
+            // 渲染搜索历史
+            function renderSearchHistory() {
+                if (!window.searchHistoryData || window.searchHistoryData.length === 0) {
+                    searchHistorySection.style.display = 'none';
+                    return;
+                }
+                
+                searchHistorySection.style.display = 'block';
+                searchHistoryContainer.innerHTML = '';
+                
+                window.searchHistoryData.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.textContent = item;
+                    
+                    historyItem.addEventListener('click', function() {
+                        searchInput.value = item;
+                        searchHistorySection.style.display = 'none';
+                        hotSearchSection.style.display = 'none';
+                        searchJobs(item);
+                    });
+                    
+                    searchHistoryContainer.appendChild(historyItem);
+                });
+            }
+            
+            // 渲染热门搜索
+            function renderHotSearch() {
+                if (!window.hotSearchData || window.hotSearchData.length === 0) {
+                    hotSearchSection.style.display = 'none';
+                    return;
+                }
+                
+                hotSearchSection.style.display = 'block';
+                hotSearchContainer.innerHTML = '';
+                
+                window.hotSearchData.forEach(item => {
+                    const hotItem = document.createElement('div');
+                    hotItem.className = 'history-item';
+                    hotItem.textContent = item;
+                    
+                    hotItem.addEventListener('click', function() {
+                        searchInput.value = item;
+                        searchHistorySection.style.display = 'none';
+                        hotSearchSection.style.display = 'none';
+                        searchJobs(item);
+                    });
+                    
+                    hotSearchContainer.appendChild(hotItem);
+                });
+            }
+            
+            // 搜索职位
+            function searchJobs(query) {
+                if (!window.jobsData) return;
+                
+                query = query.toLowerCase();
+                
+                if (!query) {
+                    renderJobList(window.jobsData);
+                    return;
+                }
+                
+                const filteredJobs = window.jobsData.filter(job => {
+                    return job.title.toLowerCase().includes(query) || 
+                           job.company.toLowerCase().includes(query) || 
+                           job.location.toLowerCase().includes(query) ||
+                           job.tags.some(tag => tag.toLowerCase().includes(query));
+                });
+                
+                renderJobList(filteredJobs);
+            }
+            
+            // 搜索框事件
+            searchInput.addEventListener('focus', function() {
+                if (!this.value) {
+                    renderSearchHistory();
+                    renderHotSearch();
+                }
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                // 延迟隐藏，以便点击历史记录
+                setTimeout(() => {
+                    searchHistorySection.style.display = 'none';
+                    hotSearchSection.style.display = 'none';
+                }, 200);
+            });
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                if (!query) {
+                    renderSearchHistory();
+                    renderHotSearch();
+                } else {
+                    searchHistorySection.style.display = 'none';
+                    hotSearchSection.style.display = 'none';
+                    searchJobs(query);
+                }
+            });
+            
+            // 筛选条件点击事件
+            const filterItems = document.querySelectorAll('.filter-item');
+            filterItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 移除所有active类
+                    filterItems.forEach(i => i.classList.remove('active'));
+                    // 添加active类到当前点击项
+                    this.classList.add('active');
+                    
+                    const filterText = this.textContent.trim();
+                    
+                    if (filterText === '推荐') {
+                        renderJobList(window.jobsData);
+                    } else if (filterText === '最新') {
+                        const sortedJobs = [...window.jobsData].sort((a, b) => 
+                            new Date(b.publishDate) - new Date(a.publishDate)
+                        );
+                        renderJobList(sortedJobs);
+                    } else if (filterText === '高薪') {
+                        const highSalaryJobs = window.jobsData.filter(job => {
+                            const salaryStr = job.salary;
+                            const maxSalary = parseInt(salaryStr.split('-')[1]);
+                            return maxSalary >= 8000;
+                        });
+                        renderJobList(highSalaryJobs);
+                    } else {
+                        // 其他筛选条件
+                        const filteredJobs = window.jobsData.filter(job => 
+                            job.tags.some(tag => tag.includes(filterText))
+                        );
+                        renderJobList(filteredJobs);
+                    }
+                });
+            });
+            
+            // 初始化渲染
+            if (window.jobsData) {
+                renderJobList(window.jobsData);
+            }
+        });
+    </script>
+</body>
+</html>

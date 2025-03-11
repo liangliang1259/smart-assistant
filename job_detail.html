@@ -107,12 +107,21 @@
             margin-bottom: 3px;
             color: #666;
         }
+        .kimi-badge {
+            background-color: #1677ff;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
     <!-- 状态栏 -->
     <div class="status-bar">
-        <div>15:17</div>
+        <div class="status-time">15:48</div>
         <div>
             <i class="fas fa-signal"></i>
             <i class="fas fa-wifi ml-2"></i>
@@ -129,88 +138,223 @@
     </div>
 
     <!-- 职位信息卡片 -->
-    <div class="bg-white p-4 mb-3">
-        <div class="flex justify-between items-start">
-            <div>
-                <div class="text-xl font-bold">电子厂普工</div>
-                <div class="salary mt-2">6000-8000元/月</div>
-            </div>
-            <div class="collect-btn">
-                <i class="far fa-star collect-icon"></i>
-                <span>收藏</span>
-            </div>
-        </div>
-        <div class="flex items-center mt-3 text-sm text-gray-600">
-            <div class="mr-3"><i class="fas fa-map-marker-alt mr-1"></i> 深圳·宝安区</div>
-            <div class="mr-3"><i class="fas fa-briefcase mr-1"></i> 1-3年</div>
-            <div><i class="fas fa-graduation-cap mr-1"></i> 初中及以上</div>
-        </div>
-        <div class="mt-3">
-            <span class="bg-gray-100 rounded px-2 py-1 mr-2 text-sm">五险一金</span>
-            <span class="bg-gray-100 rounded px-2 py-1 mr-2 text-sm">包吃住</span>
-            <span class="bg-gray-100 rounded px-2 py-1 mr-2 text-sm">加班费</span>
-            <span class="bg-gray-100 rounded px-2 py-1 text-sm">年终奖</span>
-        </div>
+    <div id="jobInfoCard" class="bg-white p-4 mb-3">
+        <!-- 职位信息将通过JavaScript动态添加 -->
     </div>
 
     <!-- 公司信息 -->
-    <div class="bg-white p-4 mb-3">
-        <div class="flex items-center">
-            <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="company-logo">
-            <div class="ml-3">
-                <div class="font-bold text-lg">富士康科技集团</div>
-                <div class="text-gray-600 mt-1">电子制造 | 10000人以上</div>
-                <div class="text-gray-600 mt-1">深圳市宝安区福永街道</div>
-            </div>
-        </div>
+    <div id="companyInfoCard" class="bg-white p-4 mb-3">
+        <!-- 公司信息将通过JavaScript动态添加 -->
     </div>
 
     <!-- 职位描述 -->
-    <div class="bg-white p-4 mb-3">
-        <div class="section-title">职位描述</div>
-        <div class="text-gray-700">
-            <p class="mb-2">【岗位职责】</p>
-            <p class="mb-2">1. 负责电子产品的组装、检测、包装等工作；</p>
-            <p class="mb-2">2. 按照生产计划和工艺要求完成生产任务；</p>
-            <p class="mb-2">3. 保证产品质量，做好生产记录；</p>
-            <p class="mb-2">4. 维护保养设备，保持工作区域整洁。</p>
-            
-            <p class="mt-4 mb-2">【任职要求】</p>
-            <p class="mb-2">1. 初中及以上学历，年龄18-45周岁；</p>
-            <p class="mb-2">2. 有电子厂工作经验优先；</p>
-            <p class="mb-2">3. 能适应站立工作和倒班；</p>
-            <p class="mb-2">4. 有责任心，做事认真细致。</p>
-            
-            <p class="mt-4 mb-2">【薪资福利】</p>
-            <p class="mb-2">1. 底薪4000元+绩效奖金+加班费；</p>
-            <p class="mb-2">2. 提供免费住宿，有补贴的员工餐厅；</p>
-            <p class="mb-2">3. 购买五险一金，节日福利；</p>
-            <p class="mb-2">4. 定期组织文体活动，有晋升空间。</p>
-        </div>
+    <div id="jobDescriptionCard" class="bg-white p-4 mb-3">
+        <!-- 职位描述将通过JavaScript动态添加 -->
     </div>
 
     <!-- 工作地点 -->
-    <div class="bg-white p-4 mb-3">
-        <div class="section-title">工作地点</div>
-        <div class="text-gray-700">
-            <p>深圳市宝安区福永街道凤凰工业园区富士康科技园</p>
-            <div class="mt-3 bg-gray-100 h-40 rounded-lg flex items-center justify-center">
-                <i class="fas fa-map-marked-alt text-gray-400 text-4xl"></i>
-            </div>
-        </div>
+    <div id="jobLocationCard" class="bg-white p-4 mb-3">
+        <!-- 工作地点将通过JavaScript动态添加 -->
     </div>
 
-    <!-- 底部操作栏 -->
+    <!-- 底部操作按钮 -->
     <div class="bottom-actions">
-        <div class="action-btn bg-blue-100 text-blue-600 mr-3">
-            投递简历
+        <div class="collect-btn">
+            <i class="far fa-star collect-icon"></i>
+            <span>收藏</span>
         </div>
-        <div class="action-btn bg-blue-600 text-white">
-            <i class="fas fa-comment-dots mr-1"></i> AI智能沟通
+        <div class="action-btn bg-gray-100 text-gray-700 mr-3">投递简历</div>
+        <div class="action-btn bg-blue-500 text-white chat-btn">
+            <i class="fas fa-comment-dots mr-1"></i>
+            AI咨询 <span class="kimi-badge">Kimi</span>
         </div>
     </div>
 
     <!-- 引入JavaScript -->
-    <script src="js/main.js"></script>
+    <script src="js/job-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新状态栏时间
+            const statusTimeElement = document.querySelector('.status-time');
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            statusTimeElement.textContent = timeString;
+            
+            // 获取URL参数中的职位ID
+            const urlParams = new URLSearchParams(window.location.search);
+            let jobId = urlParams.get('jobId');
+            
+            // 如果没有指定职位ID，默认使用第一个职位
+            if (!jobId && window.jobsData && window.jobsData.length > 0) {
+                jobId = window.jobsData[0].id;
+            } else {
+                jobId = parseInt(jobId);
+            }
+            
+            // 获取职位数据
+            let currentJob = null;
+            if (window.jobsData) {
+                currentJob = window.jobsData.find(job => job.id === jobId);
+            }
+            
+            // 如果没有找到职位数据，使用默认数据
+            if (!currentJob && window.jobsData && window.jobsData.length > 0) {
+                currentJob = window.jobsData[0];
+            }
+            
+            // 如果有职位数据，渲染页面
+            if (currentJob) {
+                renderJobInfo(currentJob);
+                renderCompanyInfo(currentJob);
+                renderJobDescription(currentJob);
+                renderJobLocation(currentJob);
+            }
+            
+            // 返回按钮事件
+            const backButton = document.querySelector('.back-button');
+            if (backButton) {
+                backButton.addEventListener('click', function() {
+                    window.parent.postMessage({ action: 'navigate', page: 'jobs.html' }, '*');
+                });
+            }
+            
+            // 聊天按钮事件
+            const chatButton = document.querySelector('.chat-btn');
+            if (chatButton) {
+                chatButton.addEventListener('click', function() {
+                    window.parent.postMessage({ 
+                        action: 'navigate', 
+                        page: 'ai_chat.html',
+                        jobId: currentJob ? currentJob.id : null
+                    }, '*');
+                });
+            }
+            
+            // 收藏按钮事件
+            const collectButton = document.querySelector('.collect-btn');
+            if (collectButton) {
+                collectButton.addEventListener('click', function() {
+                    const icon = this.querySelector('.collect-icon');
+                    if (icon.classList.contains('far')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        icon.style.color = '#f59e0b';
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        icon.style.color = '#666';
+                    }
+                });
+            }
+        });
+        
+        // 渲染职位信息
+        function renderJobInfo(job) {
+            const jobInfoCard = document.getElementById('jobInfoCard');
+            if (!jobInfoCard) return;
+            
+            // 构建标签HTML
+            const tagsHTML = job.tags.map(tag => 
+                `<span class="bg-gray-100 rounded px-2 py-1 mr-2 text-sm">${tag}</span>`
+            ).join('');
+            
+            jobInfoCard.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-xl font-bold">${job.title}</div>
+                        <div class="salary mt-2">${job.salary}</div>
+                    </div>
+                    <div class="collect-btn">
+                        <i class="far fa-star collect-icon"></i>
+                        <span>收藏</span>
+                    </div>
+                </div>
+                <div class="flex items-center mt-3 text-sm text-gray-600">
+                    <div class="mr-3"><i class="fas fa-map-marker-alt mr-1"></i> ${job.location}</div>
+                    <div class="mr-3"><i class="fas fa-briefcase mr-1"></i> 1-3年</div>
+                    <div><i class="fas fa-graduation-cap mr-1"></i> 初中及以上</div>
+                </div>
+                <div class="mt-3">
+                    ${tagsHTML}
+                </div>
+            `;
+        }
+        
+        // 渲染公司信息
+        function renderCompanyInfo(job) {
+            const companyInfoCard = document.getElementById('companyInfoCard');
+            if (!companyInfoCard) return;
+            
+            // 获取公司数据
+            let company = null;
+            if (window.companiesData) {
+                company = window.companiesData.find(comp => comp.name === job.company);
+            }
+            
+            // 如果没有找到公司数据，使用职位中的公司信息
+            if (!company) {
+                companyInfoCard.innerHTML = `
+                    <div class="flex items-center">
+                        <img src="${job.logo}" class="company-logo">
+                        <div class="ml-3">
+                            <div class="font-bold text-lg">${job.company}</div>
+                            <div class="text-gray-600 mt-1">电子制造 | 10000人以上</div>
+                            <div class="text-gray-600 mt-1">${job.location}</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            companyInfoCard.innerHTML = `
+                <div class="flex items-center">
+                    <img src="${company.logo}" class="company-logo">
+                    <div class="ml-3">
+                        <div class="font-bold text-lg">${company.name}</div>
+                        <div class="text-gray-600 mt-1">${company.industry} | ${company.size}</div>
+                        <div class="text-gray-600 mt-1">${job.location}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 渲染职位描述
+        function renderJobDescription(job) {
+            const jobDescriptionCard = document.getElementById('jobDescriptionCard');
+            if (!jobDescriptionCard) return;
+            
+            jobDescriptionCard.innerHTML = `
+                <div class="section-title">职位描述</div>
+                <div class="text-gray-700">
+                    <p class="mb-2">【岗位职责】</p>
+                    <p class="mb-2">${job.description}</p>
+                    
+                    <p class="mt-4 mb-2">【任职要求】</p>
+                    <p class="mb-2">${job.requirements}</p>
+                    
+                    <p class="mt-4 mb-2">【薪资福利】</p>
+                    <p class="mb-2">${job.benefits}</p>
+                </div>
+            `;
+        }
+        
+        // 渲染工作地点
+        function renderJobLocation(job) {
+            const jobLocationCard = document.getElementById('jobLocationCard');
+            if (!jobLocationCard) return;
+            
+            jobLocationCard.innerHTML = `
+                <div class="section-title">工作地点</div>
+                <div class="text-gray-700">
+                    <p>${job.location}</p>
+                    <div class="mt-3 bg-gray-100 h-40 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-map-marked-alt text-gray-400 text-4xl"></i>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>

@@ -84,12 +84,78 @@
             background-color: #1677ff;
             color: white;
         }
+        .kimi-badge {
+            background-color: #1677ff;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .banner {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .banner img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+        .quick-action {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #f0f7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .action-icon i {
+            font-size: 24px;
+            color: #1677ff;
+        }
+        .action-label {
+            font-size: 12px;
+            color: #333;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .view-more {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
     <!-- 状态栏 -->
     <div class="status-bar">
-        <div>15:17</div>
+        <div class="status-time">15:48</div>
         <div>
             <i class="fas fa-signal"></i>
             <i class="fas fa-wifi ml-2"></i>
@@ -103,17 +169,58 @@
             <div class="text-xl font-bold">蓝领招聘</div>
             <div class="flex">
                 <i class="fas fa-bell text-gray-600 mr-4"></i>
-                <i class="fas fa-comment-dots text-gray-600"></i>
+                <i class="fas fa-comment-dots text-gray-600 ai-chat-btn"></i>
             </div>
         </div>
-        <div class="bg-gray-100 rounded-full flex items-center px-4 py-2">
+        <div class="bg-gray-100 rounded-full flex items-center px-4 py-2 search-btn">
             <i class="fas fa-search text-gray-400 mr-2"></i>
             <span class="text-gray-400">搜索职位、公司、地点</span>
         </div>
     </div>
 
+    <!-- 轮播图 -->
+    <div class="px-4 mt-3">
+        <div class="banner">
+            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="招聘banner">
+        </div>
+    </div>
+
+    <!-- 快捷功能 -->
+    <div class="px-4">
+        <div class="quick-action">
+            <div class="action-item" data-action="all-jobs">
+                <div class="action-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <div class="action-label">全部职位</div>
+            </div>
+            <div class="action-item" data-action="nearby">
+                <div class="action-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="action-label">附近工作</div>
+            </div>
+            <div class="action-item" data-action="high-salary">
+                <div class="action-icon">
+                    <i class="fas fa-yen-sign"></i>
+                </div>
+                <div class="action-label">高薪职位</div>
+            </div>
+            <div class="action-item" data-action="ai-chat">
+                <div class="action-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="action-label">AI咨询 <span class="kimi-badge">Kimi</span></div>
+            </div>
+        </div>
+    </div>
+
     <!-- 职位分类标签 -->
     <div class="bg-white pt-2 pb-3 px-4 mb-3">
+        <div class="section-title">
+            <span>热门职位</span>
+            <span class="view-more view-all-jobs">查看全部 <i class="fas fa-chevron-right ml-1"></i></span>
+        </div>
         <div class="overflow-x-auto">
             <div class="flex">
                 <div class="category-tab active">推荐</div>
@@ -128,102 +235,8 @@
     </div>
 
     <!-- 职位列表 -->
-    <div class="px-4">
-        <!-- 职位卡片1 -->
-        <div class="job-card bg-white p-4">
-            <div class="flex justify-between items-start">
-                <div>
-                    <div class="text-lg font-medium">电子厂普工</div>
-                    <div class="flex items-center mt-1">
-                        <span class="location-tag mr-2">深圳·宝安区</span>
-                        <span class="text-gray-500 text-sm">1-3年</span>
-                    </div>
-                </div>
-                <div class="salary">6000-8000元/月</div>
-            </div>
-            <div class="flex items-center justify-between mt-4">
-                <div class="flex items-center">
-                    <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="company-logo">
-                    <div class="ml-3">
-                        <div class="font-medium">富士康科技集团</div>
-                        <div class="text-gray-500 text-sm">电子制造 | 10000人以上</div>
-                    </div>
-                </div>
-                <div class="text-blue-500">
-                    <i class="fas fa-comment-dots"></i>
-                    <span class="ml-1">AI沟通</span>
-                </div>
-            </div>
-            <div class="mt-3 text-sm text-gray-600">
-                <span class="bg-gray-100 rounded px-2 py-1 mr-2">五险一金</span>
-                <span class="bg-gray-100 rounded px-2 py-1 mr-2">包吃住</span>
-                <span class="bg-gray-100 rounded px-2 py-1">加班费</span>
-            </div>
-        </div>
-
-        <!-- 职位卡片2 -->
-        <div class="job-card bg-white p-4">
-            <div class="flex justify-between items-start">
-                <div>
-                    <div class="text-lg font-medium">物流仓储员</div>
-                    <div class="flex items-center mt-1">
-                        <span class="location-tag mr-2">广州·白云区</span>
-                        <span class="text-gray-500 text-sm">经验不限</span>
-                    </div>
-                </div>
-                <div class="salary">5500-7000元/月</div>
-            </div>
-            <div class="flex items-center justify-between mt-4">
-                <div class="flex items-center">
-                    <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="company-logo">
-                    <div class="ml-3">
-                        <div class="font-medium">京东物流</div>
-                        <div class="text-gray-500 text-sm">物流仓储 | 5000人以上</div>
-                    </div>
-                </div>
-                <div class="text-blue-500">
-                    <i class="fas fa-comment-dots"></i>
-                    <span class="ml-1">AI沟通</span>
-                </div>
-            </div>
-            <div class="mt-3 text-sm text-gray-600">
-                <span class="bg-gray-100 rounded px-2 py-1 mr-2">五险</span>
-                <span class="bg-gray-100 rounded px-2 py-1 mr-2">包住</span>
-                <span class="bg-gray-100 rounded px-2 py-1">年终奖</span>
-            </div>
-        </div>
-
-        <!-- 职位卡片3 -->
-        <div class="job-card bg-white p-4">
-            <div class="flex justify-between items-start">
-                <div>
-                    <div class="text-lg font-medium">建筑木工</div>
-                    <div class="flex items-center mt-1">
-                        <span class="location-tag mr-2">东莞·长安镇</span>
-                        <span class="text-gray-500 text-sm">3-5年</span>
-                    </div>
-                </div>
-                <div class="salary">9000-12000元/月</div>
-            </div>
-            <div class="flex items-center justify-between mt-4">
-                <div class="flex items-center">
-                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="company-logo">
-                    <div class="ml-3">
-                        <div class="font-medium">中建三局</div>
-                        <div class="text-gray-500 text-sm">建筑工程 | 1000-5000人</div>
-                    </div>
-                </div>
-                <div class="text-blue-500">
-                    <i class="fas fa-comment-dots"></i>
-                    <span class="ml-1">AI沟通</span>
-                </div>
-            </div>
-            <div class="mt-3 text-sm text-gray-600">
-                <span class="bg-gray-100 rounded px-2 py-1 mr-2">高薪</span>
-                <span class="bg-gray-100 rounded px-2 py-1 mr-2">包吃住</span>
-                <span class="bg-gray-100 rounded px-2 py-1">工伤险</span>
-            </div>
-        </div>
+    <div class="px-4" id="jobListContainer">
+        <!-- 职位卡片将通过JavaScript动态添加 -->
     </div>
 
     <!-- 底部导航栏 -->
@@ -232,13 +245,13 @@
             <i class="fas fa-home nav-icon"></i>
             <span>首页</span>
         </div>
-        <div class="nav-item" data-page="search.html">
-            <i class="fas fa-search nav-icon"></i>
-            <span>搜索</span>
+        <div class="nav-item" data-page="jobs.html">
+            <i class="fas fa-briefcase nav-icon"></i>
+            <span>职位</span>
         </div>
         <div class="nav-item" data-page="ai_chat.html">
             <i class="fas fa-comment-dots nav-icon"></i>
-            <span>沟通</span>
+            <span>AI咨询</span>
         </div>
         <div class="nav-item" data-page="profile.html">
             <i class="fas fa-user nav-icon"></i>
@@ -247,6 +260,185 @@
     </div>
 
     <!-- 引入JavaScript -->
-    <script src="js/main.js"></script>
+    <script src="js/job-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新状态栏时间
+            const statusTimeElement = document.querySelector('.status-time');
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            statusTimeElement.textContent = timeString;
+            
+            // 获取DOM元素
+            const jobListContainer = document.getElementById('jobListContainer');
+            const searchBtn = document.querySelector('.search-btn');
+            const aiChatBtn = document.querySelector('.ai-chat-btn');
+            const viewAllJobsBtn = document.querySelector('.view-all-jobs');
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const actionItems = document.querySelectorAll('.action-item');
+            
+            // 渲染职位列表（只显示前3个）
+            function renderJobList(jobs, limit = 3) {
+                jobListContainer.innerHTML = '';
+                
+                if (!jobs || jobs.length === 0) {
+                    jobListContainer.innerHTML = '<div class="text-center py-8 text-gray-500">没有找到匹配的职位</div>';
+                    return;
+                }
+                
+                // 限制显示的职位数量
+                const displayJobs = jobs.slice(0, limit);
+                
+                displayJobs.forEach(job => {
+                    const jobCard = document.createElement('div');
+                    jobCard.className = 'job-card bg-white p-4';
+                    jobCard.setAttribute('data-job-id', job.id);
+                    
+                    jobCard.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-lg font-medium">${job.title}</div>
+                                <div class="flex items-center mt-1">
+                                    <span class="location-tag mr-2">${job.location}</span>
+                                    <span class="text-gray-500 text-sm">1-3年</span>
+                                </div>
+                            </div>
+                            <div class="salary">${job.salary}</div>
+                        </div>
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="flex items-center">
+                                <img src="${job.logo}" class="company-logo">
+                                <div class="ml-3">
+                                    <div class="font-medium">${job.company}</div>
+                                    <div class="text-gray-500 text-sm">电子制造 | 10000人以上</div>
+                                </div>
+                            </div>
+                            <div class="text-blue-500 ai-chat-job" data-job-id="${job.id}">
+                                <i class="fas fa-comment-dots"></i>
+                                <span class="ml-1">AI咨询</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-sm text-gray-600">
+                            ${job.tags.map(tag => `<span class="bg-gray-100 rounded px-2 py-1 mr-2">${tag}</span>`).join('')}
+                        </div>
+                    `;
+                    
+                    // 添加点击事件
+                    jobCard.addEventListener('click', function(e) {
+                        // 如果点击的是AI咨询按钮，则跳转到AI聊天页面
+                        if (e.target.closest('.ai-chat-job')) {
+                            window.parent.postMessage({ 
+                                action: 'navigate', 
+                                page: 'ai_chat.html',
+                                jobId: job.id
+                            }, '*');
+                            return;
+                        }
+                        
+                        // 否则跳转到职位详情页
+                        window.parent.postMessage({ 
+                            action: 'navigate', 
+                            page: 'job_detail.html',
+                            jobId: job.id
+                        }, '*');
+                    });
+                    
+                    jobListContainer.appendChild(jobCard);
+                });
+            }
+            
+            // 初始化渲染
+            if (window.jobsData) {
+                renderJobList(window.jobsData);
+            }
+            
+            // 搜索按钮点击事件
+            if (searchBtn) {
+                searchBtn.addEventListener('click', function() {
+                    window.parent.postMessage({ action: 'navigate', page: 'jobs.html' }, '*');
+                });
+            }
+            
+            // AI聊天按钮点击事件
+            if (aiChatBtn) {
+                aiChatBtn.addEventListener('click', function() {
+                    window.parent.postMessage({ action: 'navigate', page: 'ai_chat.html' }, '*');
+                });
+            }
+            
+            // 查看全部职位按钮点击事件
+            if (viewAllJobsBtn) {
+                viewAllJobsBtn.addEventListener('click', function() {
+                    window.parent.postMessage({ action: 'navigate', page: 'jobs.html' }, '*');
+                });
+            }
+            
+            // 职位分类标签点击事件
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有active类
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    // 添加active类到当前点击项
+                    this.classList.add('active');
+                    
+                    const filterText = this.textContent.trim();
+                    
+                    if (filterText === '推荐') {
+                        renderJobList(window.jobsData);
+                    } else {
+                        // 根据分类筛选职位
+                        const filteredJobs = window.jobsData.filter(job => {
+                            return job.title.includes(filterText) || 
+                                   job.tags.some(tag => tag.includes(filterText));
+                        });
+                        renderJobList(filteredJobs);
+                    }
+                });
+            });
+            
+            // 快捷功能点击事件
+            actionItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    
+                    switch (action) {
+                        case 'all-jobs':
+                            window.parent.postMessage({ action: 'navigate', page: 'jobs.html' }, '*');
+                            break;
+                        case 'nearby':
+                            window.parent.postMessage({ 
+                                action: 'navigate', 
+                                page: 'jobs.html',
+                                filter: 'nearby'
+                            }, '*');
+                            break;
+                        case 'high-salary':
+                            window.parent.postMessage({ 
+                                action: 'navigate', 
+                                page: 'jobs.html',
+                                filter: 'high-salary'
+                            }, '*');
+                            break;
+                        case 'ai-chat':
+                            window.parent.postMessage({ action: 'navigate', page: 'ai_chat.html' }, '*');
+                            break;
+                    }
+                });
+            });
+            
+            // 底部导航栏点击事件
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const page = this.getAttribute('data-page');
+                    if (page) {
+                        window.parent.postMessage({ action: 'navigate', page: page }, '*');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
