@@ -7,19 +7,20 @@ const KIMI_API_CONFIG = {
     MODEL: "moonshot-v1-8k" // Kimi的模型名称
 };
 
-// 模拟Kimi AI API端点
+// 模拟Kimi API端点
 const KIMI_API_ENDPOINT = KIMI_API_CONFIG.API_ENDPOINT;
 
-// 职位数据库 - 现在从job-data.js导入
+// 聊天历史记录 - 用于保存对话上下文
+let chatHistory = [];
 
 // 初始化Kimi AI聊天
 function initKimiChat() {
     console.log("初始化Kimi AI聊天功能...");
     
     // 获取DOM元素
-    const chatContainer = document.querySelector('.chat-container');
-    const inputField = document.querySelector('.input-field');
-    const sendButton = document.querySelector('.send-btn');
+    const chatContainer = document.getElementById('chat-container');
+    const inputField = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
     
     // 清除输入框的默认文本
     inputField.addEventListener('focus', function() {
@@ -65,7 +66,7 @@ function initKimiChat() {
 
 // 发送消息函数
 function sendMessage() {
-    const inputField = document.querySelector('.input-field');
+    const inputField = document.getElementById('user-input');
     const message = inputField.textContent.trim();
     
     if (message === '' || message === '输入消息...') return;
@@ -79,7 +80,7 @@ function sendMessage() {
 
 // 发送用户消息到聊天界面
 function sendUserMessage(message) {
-    const chatContainer = document.querySelector('.chat-container');
+    const chatContainer = document.getElementById('chat-container');
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
@@ -96,6 +97,12 @@ function sendUserMessage(message) {
     // 添加到聊天容器
     chatContainer.appendChild(messageElement);
     
+    // 添加到聊天历史
+    chatHistory.push({
+        role: "user",
+        content: message
+    });
+    
     // 滚动到底部
     scrollToBottom();
     
@@ -108,7 +115,7 @@ function sendUserMessage(message) {
 
 // 显示AI正在输入的指示器
 function showTypingIndicator() {
-    const chatContainer = document.querySelector('.chat-container');
+    const chatContainer = document.getElementById('chat-container');
     
     // 创建AI头像和消息容器
     const typingContainer = document.createElement('div');
@@ -145,9 +152,6 @@ function removeTypingIndicator() {
 
 // 使用Kimi AI处理消息
 function processMessageWithKimi(message) {
-    // 显示AI正在输入
-    showTypingIndicator();
-    
     // 获取当前职位信息
     let jobContext = "";
     const urlParams = new URLSearchParams(window.location.search);
@@ -177,6 +181,12 @@ function processMessageWithKimi(message) {
             if (response && response.choices && response.choices.length > 0) {
                 const aiMessage = response.choices[0].message.content;
                 
+                // 添加到聊天历史
+                chatHistory.push({
+                    role: "assistant",
+                    content: aiMessage
+                });
+                
                 // 生成快速回复选项
                 const quickReplies = generateQuickRepliesBasedOnContext(message, aiMessage);
                 
@@ -201,23 +211,34 @@ function processMessageWithKimi(message) {
 // 调用Kimi API
 async function callKimiAPI(userMessage, contextInfo = "") {
     try {
-        // 构建请求体
-        const requestBody = {
-            model: KIMI_API_CONFIG.MODEL,
-            messages: [
-                {
-                    role: "system",
-                    content: `你是Kimi，一个专业的蓝领招聘顾问AI助手。你的任务是帮助求职者了解职位信息、解答求职问题，并提供专业的就业建议。
+        // 构建消息历史，最多包含最近5条消息
+        const recentMessages = chatHistory.slice(-5);
+        
+        // 构建系统消息
+        const systemMessage = {
+            role: "system",
+            content: `你是Kimi，一个专业的蓝领招聘顾问AI助手。你的任务是帮助求职者了解职位信息、解答求职问题，并提供专业的就业建议。
 请使用友好、专业的语气回答问题，回答要简洁明了，避免过长的回复。
 如果你不确定某个具体信息，请诚实地表明，并提供可能的解决方案或建议用户联系招聘人员。
 以下是当前用户咨询的职位背景信息，请根据这些信息回答用户的问题：
 ${contextInfo}`
-                },
-                {
-                    role: "user",
-                    content: userMessage
-                }
-            ],
+        };
+        
+        // 构建完整消息数组
+        const messages = [systemMessage, ...recentMessages];
+        
+        // 如果当前消息不在历史记录中，添加它
+        if (!recentMessages.some(msg => msg.role === "user" && msg.content === userMessage)) {
+            messages.push({
+                role: "user",
+                content: userMessage
+            });
+        }
+        
+        // 构建请求体
+        const requestBody = {
+            model: KIMI_API_CONFIG.MODEL,
+            messages: messages,
             temperature: 0.7,
             max_tokens: 800
         };
@@ -259,9 +280,11 @@ ${contextInfo}`
 function mockKimiAPIResponse(userMessage) {
     // 分析消息意图
     const intent = analyzeMessageIntent(userMessage);
+    
+    // 根据意图生成回复
     const reply = generateReplyBasedOnIntent(intent, userMessage);
     
-    // 构建模拟的API响应格式
+    // 构建模拟API响应
     return {
         id: "mock-response-" + Date.now(),
         object: "chat.completion",
@@ -288,60 +311,79 @@ function mockKimiAPIResponse(userMessage) {
 // 根据上下文生成快速回复选项
 function generateQuickRepliesBasedOnContext(userMessage, aiResponse) {
     // 默认快速回复选项
-    const defaultReplies = ["薪资待遇如何？", "需要什么条件？", "工作时间怎样？"];
+    let defaultReplies = ["了解更多", "谢谢", "还有其他问题"];
     
-    // 根据用户消息和AI回复分析可能的后续问题
-    const message = userMessage.toLowerCase();
-    
-    if (message.includes("薪资") || message.includes("工资")) {
-        return ["有什么福利？", "需要什么条件？", "怎么申请这个职位？"];
-    } else if (message.includes("要求") || message.includes("条件")) {
-        return ["薪资待遇如何？", "工作时间怎样？", "有培训吗？"];
-    } else if (message.includes("工作时间") || message.includes("上班时间")) {
-        return ["有加班费吗？", "薪资待遇如何？", "住宿条件如何？"];
-    } else if (message.includes("公司") || message.includes("企业")) {
-        return ["公司规模多大？", "有晋升机会吗？", "薪资待遇如何？"];
-    } else if (aiResponse.includes("联系") || aiResponse.includes("咨询")) {
-        return ["怎么联系招聘人员？", "有其他类似职位吗？", "谢谢您的帮助"];
+    // 根据AI回复内容生成相关问题
+    if (aiResponse.includes("薪资") || aiResponse.includes("工资")) {
+        defaultReplies.push("有什么福利？");
     }
     
-    return defaultReplies;
+    if (aiResponse.includes("工作时间") || aiResponse.includes("班次")) {
+        defaultReplies.push("需要加班吗？");
+    }
+    
+    if (aiResponse.includes("住宿") || aiResponse.includes("宿舍")) {
+        defaultReplies.push("伙食怎么样？");
+    }
+    
+    if (aiResponse.includes("面试") || aiResponse.includes("入职")) {
+        defaultReplies.push("需要准备什么材料？");
+    }
+    
+    // 随机选择3-4个选项
+    const shuffled = defaultReplies.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, Math.min(4, shuffled.length));
 }
 
 // 显示AI回复
 function showAIReply(message, quickReplies = []) {
-    const chatContainer = document.querySelector('.chat-container');
+    const chatContainer = document.getElementById('chat-container');
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const timeString = `${hours}:${minutes}`;
     
-    // 创建AI消息元素
+    // 创建AI消息容器
     const messageContainer = document.createElement('div');
     messageContainer.className = 'flex items-start mb-4';
     
-    // 构建HTML
-    let quickRepliesHTML = '';
+    // 创建AI头像
+    const aiAvatar = document.createElement('div');
+    aiAvatar.className = 'ai-avatar';
+    aiAvatar.innerHTML = '<i class="fas fa-robot"></i>';
+    
+    // 创建消息内容容器
+    const contentContainer = document.createElement('div');
+    
+    // 创建消息元素
+    const messageElement = document.createElement('div');
+    messageElement.className = 'message received';
+    messageElement.innerHTML = `
+        ${message}
+        <div class="message-time">${timeString}</div>
+    `;
+    
+    // 添加到内容容器
+    contentContainer.appendChild(messageElement);
+    
+    // 如果有快速回复选项，添加它们
     if (quickReplies && quickReplies.length > 0) {
-        quickRepliesHTML = `
-            <div class="quick-replies">
-                ${quickReplies.map(reply => `<div class="quick-reply">${reply}</div>`).join('')}
-            </div>
-        `;
+        const quickRepliesContainer = document.createElement('div');
+        quickRepliesContainer.className = 'quick-replies';
+        
+        quickReplies.forEach(reply => {
+            const quickReplyElement = document.createElement('div');
+            quickReplyElement.className = 'quick-reply';
+            quickReplyElement.textContent = reply;
+            quickRepliesContainer.appendChild(quickReplyElement);
+        });
+        
+        contentContainer.appendChild(quickRepliesContainer);
     }
     
-    messageContainer.innerHTML = `
-        <div class="ai-avatar">
-            <i class="fas fa-robot"></i>
-        </div>
-        <div>
-            <div class="message received">
-                ${message}
-                <div class="message-time">${timeString}</div>
-            </div>
-            ${quickRepliesHTML}
-        </div>
-    `;
+    // 组装消息
+    messageContainer.appendChild(aiAvatar);
+    messageContainer.appendChild(contentContainer);
     
     // 添加到聊天容器
     chatContainer.appendChild(messageContainer);
@@ -352,151 +394,109 @@ function showAIReply(message, quickReplies = []) {
 
 // 滚动到聊天窗口底部
 function scrollToBottom() {
-    const chatContainer = document.querySelector('.chat-container');
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    const chatContainer = document.getElementById('chat-container');
+    if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 }
 
 // 分析消息意图
 function analyzeMessageIntent(message) {
     message = message.toLowerCase();
     
-    // 定义意图关键词
-    const intentKeywords = {
-        salary: ['薪资', '工资', '钱', '待遇', '多少钱', '报酬', '收入'],
-        requirements: ['要求', '条件', '资格', '学历', '经验', '技能', '能力', '需要什么'],
-        benefits: ['福利', '保险', '五险', '一金', '补贴', '奖金', '年终奖'],
-        shifts: ['班次', '倒班', '上班时间', '工作时间', '休息', '轮班', '夜班', '白班'],
-        accommodation: ['住宿', '宿舍', '住', '几人间', '卫浴', '条件', '环境'],
-        training: ['培训', '学习', '教育', '成长', '发展', '晋升', '提升'],
-        interview: ['面试', '入职', '流程', '准备', '需要带', '资料', '证件'],
-        workContent: ['工作内容', '做什么', '职责', '任务', '工作描述', '具体工作'],
-        overtime: ['加班', '额外工作', '工作量', '忙吗', '辛苦吗'],
-        location: ['地点', '地址', '在哪', '位置', '怎么去', '交通', '路线'],
-        company: ['公司', '企业', '规模', '背景', '怎么样', '好不好']
-    };
-    
-    // 检查消息中的关键词
-    for (const [intent, keywords] of Object.entries(intentKeywords)) {
-        for (const keyword of keywords) {
-            if (message.includes(keyword)) {
-                return intent;
-            }
-        }
+    // 工作内容相关
+    if (message.includes("工作内容") || message.includes("做什么") || message.includes("工作职责")) {
+        return "工作内容";
     }
     
-    // 默认意图
-    return 'general';
+    // 薪资相关
+    if (message.includes("薪资") || message.includes("工资") || message.includes("待遇") || 
+        message.includes("钱") || message.includes("多少钱")) {
+        return "薪资";
+    }
+    
+    // 要求相关
+    if (message.includes("要求") || message.includes("条件") || message.includes("资格") || 
+        message.includes("学历") || message.includes("经验")) {
+        return "要求";
+    }
+    
+    // 福利相关
+    if (message.includes("福利") || message.includes("好处") || message.includes("保险") || 
+        message.includes("公积金") || message.includes("补贴")) {
+        return "福利";
+    }
+    
+    // 住宿相关
+    if (message.includes("住宿") || message.includes("宿舍") || message.includes("住") || 
+        message.includes("床位") || message.includes("食堂")) {
+        return "住宿";
+    }
+    
+    // 入职流程相关
+    if (message.includes("入职") || message.includes("流程") || message.includes("加入") || 
+        message.includes("报到") || message.includes("材料") || message.includes("证件")) {
+        return "入职流程";
+    }
+    
+    // 默认为一般咨询
+    return "一般咨询";
 }
 
 // 根据意图生成回复
 function generateReplyBasedOnIntent(intent, originalMessage) {
-    // 获取当前职位信息
-    const currentJob = window.jobsData ? window.jobsData.find(job => job.title === "电子厂普工") : null;
-    
-    // 如果没有找到职位数据，使用默认回复
-    if (!currentJob && intent !== 'general') {
-        return {
-            message: "非常抱歉，我目前无法获取这个职位的详细信息。您可以直接联系招聘人员了解更多详情。您还有其他问题吗？",
-            quickReplies: ["联系招聘人员", "查看其他职位", "了解公司信息"]
-        };
-    }
-    
-    // 根据意图生成回复
     switch (intent) {
-        case 'salary':
+        case "工作内容":
             return {
-                message: `这个岗位的薪资范围是${currentJob.salary}。薪资构成包括：基本工资+加班费+绩效奖金+各类补贴。正常工作日加班1.5倍工资，休息日加班2倍工资，法定节假日加班3倍工资。试用期工资为转正后的80%，试用期为1个月。`,
-                quickReplies: ["加班情况如何？", "有什么福利？", "工资几号发？"]
+                message: "这个岗位主要负责产品的组装、检测和包装工作。根据不同产线安排，可能会有不同的具体任务，如元器件安装、产品组装、质量检验等。工作环境整洁，有空调，通常需要站立工作，每天工作时间为8-10小时，含休息时间。",
+                quickReplies: ["需要倒班吗？", "有培训吗？", "需要加班吗？", "工作强度大吗？"]
             };
             
-        case 'requirements':
+        case "薪资":
             return {
-                message: `应聘条件：${currentJob.requirements}。我们欢迎各类人才加入，无需太多工作经验，公司会提供岗前培训。需要注意的是，入职需要带身份证原件、学历证明、健康证（可入职后办理）和2寸照片若干。`,
-                quickReplies: ["有培训吗？", "需要体检吗？", "可以现场面试吗？"]
+                message: "基本工资为3000-4000元/月，另有绩效奖金、全勤奖、夜班补贴等。正常工作下，月收入约6000-8000元。加班费按国家规定计算：工作日加班1.5倍、休息日加班2倍、法定节假日加班3倍。薪资按月发放，每月10日前发上月工资，直接打入工资卡。",
+                quickReplies: ["有什么福利？", "需要加班吗？", "有年终奖吗？", "试用期工资怎么算？"]
             };
             
-        case 'benefits':
+        case "要求":
             return {
-                message: `我们提供的福利待遇包括：${currentJob.benefits}。此外，工作满一年后可享受带薪年假，表现优秀的员工有机会获得晋升和加薪。公司还会定期组织团建活动和节日庆祝。`,
-                quickReplies: ["住宿条件如何？", "有餐补吗？", "有交通补贴吗？"]
+                message: "这个岗位的基本要求是：年龄18-45岁，身体健康，能适应站立工作。学历要求初中及以上，无需工作经验，公司会提供岗前培训。需要有基本的识字能力和简单计算能力，能够理解工作指令。视力要求正常，无色盲色弱。",
+                quickReplies: ["有体检要求吗？", "需要什么证件？", "有性别限制吗？", "培训要多久？"]
             };
             
-        case 'shifts':
+        case "福利":
             return {
-                message: `工作时间安排：${currentJob.shifts}。每月休息4天，可根据产线需求调整。加班情况视订单量而定，旺季可能会有较多加班机会，淡季相对较少。加班是自愿的，但可以增加收入。`,
-                quickReplies: ["倒班补贴多少？", "休息怎么安排？", "加班费怎么算？"]
+                message: "公司提供以下福利：1. 五险一金（养老、医疗、失业、工伤、生育保险和住房公积金）；2. 免费工作餐或餐补；3. 免费厂车或交通补贴；4. 免费住宿（6-8人间）；5. 带薪年假、婚假、产假等法定假期；6. 节日福利和生日福利；7. 定期体检；8. 内部晋升机会和技能培训。",
+                quickReplies: ["住宿条件怎么样？", "伙食怎么样？", "有娱乐设施吗？", "转正后待遇有变化吗？"]
             };
             
-        case 'accommodation':
+        case "住宿":
             return {
-                message: "公司提供免费的员工宿舍，标准为6-8人间，配有空调、热水器和公共卫生间。宿舍区有洗衣房、小超市、食堂和休闲区。如果您希望住条件更好的宿舍，公司也提供2-4人间的优质宿舍，但需要支付一定的住宿费（约200-400元/月）。",
-                quickReplies: ["有独立卫浴吗？", "可以自己租房吗？", "宿舍有网络吗？"]
+                message: "公司提供免费的员工宿舍，标准是6-8人间，上下铺床位，配有空调、热水器和基础家具（衣柜、桌椅等）。宿舍楼内有公共卫浴设施，每层楼约有4-6个卫浴间。宿舍区有洗衣房、小超市、食堂和休闲区。如果您希望住条件更好的宿舍，公司也提供2-4人间的优质宿舍，但需要支付一定的住宿费（约200-400元/月）。",
+                quickReplies: ["伙食怎么样？", "宿舍有网络吗？", "可以自己租房吗？", "宿舍管理严格吗？"]
             };
             
-        case 'training':
+        case "入职流程":
             return {
-                message: "公司为新员工提供为期一周的岗前培训，内容包括公司文化、安全生产、操作技能等。此外，表现优秀的员工有机会参加技能提升培训，为晋升打下基础。我们鼓励员工不断学习和成长，有完善的内部晋升通道。",
-                quickReplies: ["晋升机会如何？", "培训有补贴吗？", "可以转岗吗？"]
+                message: "入职流程如下：1. 准备材料：身份证原件及复印件、学历证明、近期免冠照片2-4张、银行卡；2. 填写入职申请表；3. 参加入职体检；4. 参加岗前培训（3-7天，有培训补贴）；5. 签订劳动合同；6. 领取工牌和工作用品；7. 安排住宿；8. 正式上岗。整个流程约需5-7个工作日完成。",
+                quickReplies: ["体检项目有哪些？", "需要押金吗？", "什么时候可以入职？", "培训有工资吗？"]
             };
-            
-        case 'interview':
-            return {
-                message: "入职流程很简单：1. 投递简历或直接到工厂招聘处登记；2. 参加面试（主要是了解基本情况，没有难度）；3. 体检；4. 入职培训；5. 正式上岗。面试时需要带身份证原件和复印件，如果当场通过可以安排住宿，最快3天内可以正式上岗。",
-                quickReplies: ["可以直接去面试吗？", "需要准备什么？", "多久能入职？"]
-            };
-            
-        case 'workContent':
-            return {
-                message: `工作内容：${currentJob.description}。具体来说，您可能会负责电子元器件的组装、焊接、检测或包装等工作。工作环境是无尘车间，需要穿工作服和佩戴手套等防护装备。工作强度适中，但需要长时间站立或坐姿操作。`,
-                quickReplies: ["需要什么技能？", "工作环境如何？", "工作强度大吗？"]
-            };
-            
-        case 'overtime':
-            return {
-                message: "加班情况视订单量而定，旺季（通常是节假日前和新品发布前）会有较多加班机会，淡季相对较少。加班是自愿的，但可以增加收入。正常工作日加班1.5倍工资，休息日加班2倍工资，法定节假日加班3倍工资。月均加班时间约30-40小时。",
-                quickReplies: ["休息怎么安排？", "加班费怎么算？", "可以拒绝加班吗？"]
-            };
-            
-        case 'location':
-            return {
-                message: `工作地点位于${currentJob.location}。公司有免费班车接送，覆盖主要居住区和交通枢纽。如果自行前往，可以乘坐地铁或公交到附近站点，步行约10分钟可到。厂区周边有商场、医院、银行等配套设施，生活便利。`,
-                quickReplies: ["有班车吗？", "周边环境如何？", "可以自己租房吗？"]
-            };
-            
-        case 'company':
-            const company = window.companiesData ? window.companiesData.find(comp => comp.name === "富士康科技集团") : null;
-            if (company) {
-                return {
-                    message: `${company.name}是${company.description}公司成立于${company.founded}，现有员工${company.size}。企业文化：${company.culture}`,
-                    quickReplies: ["公司规模如何？", "发展前景怎样？", "工作氛围如何？"]
-                };
-            } else {
-                return {
-                    message: "富士康科技集团是全球最大的电子产品代工企业，为苹果、华为等知名品牌提供代工服务。公司成立于1974年，现有员工超过10万人。公司注重效率和质量，工作节奏较快，管理规范。",
-                    quickReplies: ["公司规模如何？", "发展前景怎样？", "工作氛围如何？"]
-                };
-            }
             
         default:
-            // 处理一般性问题或未识别的意图
-            if (originalMessage.includes("你好") || originalMessage.includes("您好")) {
+            // 一般咨询或无法识别的意图
+            if (originalMessage.includes("你好") || originalMessage.includes("您好") || originalMessage.includes("hi") || originalMessage.includes("hello")) {
                 return {
-                    message: "您好！我是富士康的AI招聘助手，由Kimi提供智能支持。很高兴为您服务！您可以向我咨询关于职位、薪资、福利、工作环境等任何问题，我会尽力为您解答。",
-                    quickReplies: ["工作内容是什么？", "薪资怎么算？", "需要什么条件？", "有什么福利？"]
+                    message: "您好！我是蓝领招聘的AI助手，很高兴为您服务。我可以回答您关于招聘职位的各种问题，包括工作内容、薪资待遇、入职要求、公司福利等。请问您想了解什么呢？",
+                    quickReplies: ["热门职位推荐", "如何准备面试", "薪资行情如何", "求职技巧分享"]
                 };
             } else if (originalMessage.includes("谢谢") || originalMessage.includes("感谢")) {
                 return {
-                    message: "不客气！为您服务是我的荣幸。如果您还有其他问题，随时可以向我咨询。祝您求职顺利！",
-                    quickReplies: ["我想应聘这个职位", "查看其他职位", "联系招聘人员"]
-                };
-            } else if (originalMessage.includes("再见") || originalMessage.includes("拜拜")) {
-                return {
-                    message: "再见！感谢您的咨询。希望我的回答对您有所帮助。如果之后有任何问题，欢迎随时回来咨询。祝您生活愉快！",
-                    quickReplies: ["我想应聘这个职位", "查看其他职位", "稍后再联系"]
+                    message: "不客气！很高兴能帮到您。如果您还有其他问题，随时可以向我咨询。祝您求职顺利！",
+                    quickReplies: ["还有其他问题", "再见"]
                 };
             } else {
                 return {
-                    message: "非常抱歉，我可能没有完全理解您的问题。您可以尝试用更简单的方式描述，或者直接点击下方的快速回复选项来了解相关信息。您也可以咨询薪资、福利、工作内容、入职要求等具体问题。",
+                    message: "感谢您的咨询。我理解您想了解更多关于这个职位的信息。您可以具体询问工作内容、薪资待遇、入职要求、公司福利、住宿条件或入职流程等方面的问题，我会尽力为您解答。",
                     quickReplies: ["工作内容是什么？", "薪资怎么算？", "需要什么条件？", "有什么福利？"]
                 };
             }
@@ -505,3 +505,4 @@ function generateReplyBasedOnIntent(intent, originalMessage) {
 
 // 导出函数
 window.initKimiChat = initKimiChat;
+window.showAIReply = showAIReply;
