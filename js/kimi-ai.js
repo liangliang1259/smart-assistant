@@ -506,3 +506,5 @@ function generateReplyBasedOnIntent(intent, originalMessage) {
 // 导出函数
 window.initKimiChat = initKimiChat;
 window.showAIReply = showAIReply;
+window.processMessageWithKimi = processMessageWithKimi;
+window.sendUserMessage = sendUserMessage;

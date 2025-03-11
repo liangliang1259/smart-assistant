@@ -199,20 +199,16 @@
     <div class="bg-white p-4 sticky top-0 z-10 shadow-sm">
         <div class="flex items-center">
             <i class="fas fa-arrow-left text-gray-600 mr-4 back-button"></i>
-            <div class="text-lg font-medium">AI智能沟通助手</div>
-            <div class="kimi-badge">Kimi驱动</div>
+            <h1 class="text-lg font-semibold">AI智能沟通</h1>
+            <div class="kimi-badge">Kimi提供支持</div>
         </div>
     </div>
 
-    <!-- 职位信息 -->
-    <div class="p-4" id="job-info-container">
-        <!-- 职位信息将通过JavaScript动态添加 -->
-    </div>
+    <!-- 职位信息容器 -->
+    <div id="job-info-container" class="mx-4 mt-4"></div>
 
-    <!-- 聊天内容 -->
-    <div class="chat-container" id="chat-container">
-        <!-- 聊天内容将通过JavaScript动态添加 -->
-    </div>
+    <!-- 聊天容器 -->
+    <div id="chat-container" class="chat-container"></div>
 
     <!-- 底部输入框 -->
     <div class="chat-input">
@@ -229,8 +225,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 初始化Kimi AI聊天功能
-            if (typeof initKimiChat === 'function') {
-                initKimiChat();
+            if (typeof window.initKimiChat === 'function') {
+                console.log("初始化Kimi AI聊天功能...");
+                window.initKimiChat();
+            } else {
+                console.error("Kimi AI聊天功能未正确加载");
             }
             
             // 更新状态栏时间
@@ -260,7 +259,7 @@
                 
                 // 显示欢迎消息
                 setTimeout(() => {
-                    showWelcomeMessage();
+                    displayWelcomeMessage();
                 }, 500);
             }
             
@@ -292,7 +291,7 @@
             }
             
             // 显示欢迎消息
-            function showWelcomeMessage() {
+            function displayWelcomeMessage() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const jobId = urlParams.get('jobId');
                 let welcomeMessage = '';
@@ -312,40 +311,10 @@
                     quickReplies = ["热门职位推荐", "如何准备面试", "薪资行情如何", "求职技巧分享"];
                 }
                 
-                // 显示AI回复
-                showAIReply(welcomeMessage, quickReplies);
-            }
-            
-            // 显示AI回复
-            function showAIReply(message, quickReplies) {
-                const chatContainer = document.getElementById('chat-container');
-                const aiAvatar = document.createElement('div');
-                aiAvatar.className = 'ai-avatar';
-                aiAvatar.innerHTML = '<i class="fas fa-robot"></i>';
-                
-                const messageElement = document.createElement('div');
-                messageElement.className = 'message received';
-                messageElement.innerHTML = message;
-                
-                const quickRepliesElement = document.createElement('div');
-                quickRepliesElement.className = 'quick-replies';
-                
-                quickReplies.forEach(reply => {
-                    const quickReplyElement = document.createElement('div');
-                    quickReplyElement.className = 'quick-reply';
-                    quickReplyElement.textContent = reply;
-                    quickRepliesElement.appendChild(quickReplyElement);
-                });
-                
-                const messageContainer = document.createElement('div');
-                messageContainer.appendChild(aiAvatar);
-                messageContainer.appendChild(messageElement);
-                messageContainer.appendChild(quickRepliesElement);
-                
-                chatContainer.appendChild(messageContainer);
-                
-                // 滚动到最新消息
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+                // 使用kimi-ai.js中的showAIReply函数
+                if (typeof window.showAIReply === 'function') {
+                    window.showAIReply(welcomeMessage, quickReplies);
+                }
             }
         });
     </script>
