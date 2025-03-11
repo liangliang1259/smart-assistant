@@ -327,7 +327,7 @@
                     }
                 });
                 
-                // 发送消息事件 - 直接使用内联函数而不是引用外部函数
+                // 发送消息事件 - 使用Kimi API
                 sendButton.addEventListener('click', function() {
                     console.log("发送按钮被点击");
                     const message = inputField.textContent.trim();
@@ -367,35 +367,128 @@
                         chatContainer.appendChild(typingIndicator);
                         chatContainer.scrollTop = chatContainer.scrollHeight;
                         
-                        // 模拟AI回复
-                        setTimeout(() => {
-                            // 移除输入指示器
-                            chatContainer.removeChild(typingIndicator);
-                            
-                            // 显示AI回复
-                            const aiMessageElement = document.createElement('div');
-                            aiMessageElement.className = 'message received';
-                            aiMessageElement.innerHTML = `
-                                我收到了你的消息："${message}"。我是AI助手，很高兴为你提供帮助！
-                                <div class="message-time">${timeString}</div>
-                            `;
-                            chatContainer.appendChild(aiMessageElement);
-                            
-                            // 添加快速回复选项
-                            const quickRepliesContainer = document.createElement('div');
-                            quickRepliesContainer.className = 'quick-replies';
-                            
-                            const quickReplies = ['查看职位详情', '申请流程', '联系方式'];
-                            quickReplies.forEach(reply => {
-                                const quickReplyElement = document.createElement('div');
-                                quickReplyElement.className = 'quick-reply';
-                                quickReplyElement.textContent = reply;
-                                quickRepliesContainer.appendChild(quickReplyElement);
-                            });
-                            
-                            chatContainer.appendChild(quickRepliesContainer);
-                            chatContainer.scrollTop = chatContainer.scrollHeight;
-                        }, 1500);
+                        // 获取当前职位上下文
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const jobId = urlParams.get('jobId');
+                        let jobContext = "";
+                        
+                        if (jobId && window.jobsData) {
+                            const job = window.jobsData.find(j => j.id === parseInt(jobId));
+                            if (job) {
+                                jobContext = `用户正在咨询的职位信息：
+职位名称: ${job.title}
+公司: ${job.company}
+地点: ${job.location}
+薪资: ${job.salary}
+要求: ${job.requirements}
+福利: ${job.benefits}`;
+                            }
+                        }
+                        
+                        // 调用Kimi API
+                        if (typeof window.callKimiAPI === 'function') {
+                            console.log("调用Kimi API...");
+                            window.callKimiAPI(message, jobContext)
+                                .then(response => {
+                                    // 移除输入指示器
+                                    chatContainer.removeChild(typingIndicator);
+                                    
+                                    if (response && response.choices && response.choices.length > 0) {
+                                        const aiMessage = response.choices[0].message.content;
+                                        
+                                        // 显示AI回复
+                                        const aiMessageElement = document.createElement('div');
+                                        aiMessageElement.className = 'message received';
+                                        aiMessageElement.innerHTML = `
+                                            ${aiMessage}
+                                            <div class="message-time">${timeString}</div>
+                                        `;
+                                        chatContainer.appendChild(aiMessageElement);
+                                        
+                                        // 生成快速回复选项
+                                        const quickRepliesContainer = document.createElement('div');
+                                        quickRepliesContainer.className = 'quick-replies';
+                                        
+                                        let quickReplies = ['查看职位详情', '申请流程', '联系方式'];
+                                        if (typeof window.generateQuickRepliesBasedOnContext === 'function') {
+                                            const generatedReplies = window.generateQuickRepliesBasedOnContext(message, aiMessage);
+                                            if (generatedReplies && generatedReplies.length > 0) {
+                                                quickReplies = generatedReplies;
+                                            }
+                                        }
+                                        
+                                        quickReplies.forEach(reply => {
+                                            const quickReplyElement = document.createElement('div');
+                                            quickReplyElement.className = 'quick-reply';
+                                            quickReplyElement.textContent = reply;
+                                            quickRepliesContainer.appendChild(quickReplyElement);
+                                        });
+                                        
+                                        chatContainer.appendChild(quickRepliesContainer);
+                                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Kimi API调用失败:", error);
+                                    // 移除输入指示器
+                                    chatContainer.removeChild(typingIndicator);
+                                    
+                                    // 显示错误消息
+                                    const errorMessageElement = document.createElement('div');
+                                    errorMessageElement.className = 'message received';
+                                    errorMessageElement.innerHTML = `
+                                        抱歉，我暂时无法回答您的问题。请稍后再试。
+                                        <div class="message-time">${timeString}</div>
+                                    `;
+                                    chatContainer.appendChild(errorMessageElement);
+                                    
+                                    // 添加快速回复选项
+                                    const quickRepliesContainer = document.createElement('div');
+                                    quickRepliesContainer.className = 'quick-replies';
+                                    
+                                    const quickReplies = ['重新提问', '联系客服'];
+                                    quickReplies.forEach(reply => {
+                                        const quickReplyElement = document.createElement('div');
+                                        quickReplyElement.className = 'quick-reply';
+                                        quickReplyElement.textContent = reply;
+                                        quickRepliesContainer.appendChild(quickReplyElement);
+                                    });
+                                    
+                                    chatContainer.appendChild(quickRepliesContainer);
+                                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                                });
+                        } else {
+                            console.error("Kimi API函数未找到，使用模拟响应");
+                            // 模拟AI回复
+                            setTimeout(() => {
+                                // 移除输入指示器
+                                chatContainer.removeChild(typingIndicator);
+                                
+                                // 显示AI回复
+                                const aiMessageElement = document.createElement('div');
+                                aiMessageElement.className = 'message received';
+                                aiMessageElement.innerHTML = `
+                                    我收到了你的消息："${message}"。我是AI助手，很高兴为你提供帮助！(模拟响应)
+                                    <div class="message-time">${timeString}</div>
+                                `;
+                                chatContainer.appendChild(aiMessageElement);
+                                
+                                // 添加快速回复选项
+                                const quickRepliesContainer = document.createElement('div');
+                                quickRepliesContainer.className = 'quick-replies';
+                                
+                                const quickReplies = ['查看职位详情', '申请流程', '联系方式'];
+                                quickReplies.forEach(reply => {
+                                    const quickReplyElement = document.createElement('div');
+                                    quickReplyElement.className = 'quick-reply';
+                                    quickReplyElement.textContent = reply;
+                                    quickRepliesContainer.appendChild(quickReplyElement);
+                                });
+                                
+                                chatContainer.appendChild(quickRepliesContainer);
+                                chatContainer.scrollTop = chatContainer.scrollHeight;
+                            }, 1500);
+                        }
                         
                         // 清空输入框
                         inputField.textContent = '';
