@@ -508,3 +508,11 @@ window.initKimiChat = initKimiChat;
 window.showAIReply = showAIReply;
 window.processMessageWithKimi = processMessageWithKimi;
 window.sendUserMessage = sendUserMessage;
+window.sendMessage = sendMessage;
+
+// 全局范围内也直接暴露这些函数
+var initKimiChat = window.initKimiChat;
+var showAIReply = window.showAIReply;
+var processMessageWithKimi = window.processMessageWithKimi;
+var sendUserMessage = window.sendUserMessage;
+var sendMessage = window.sendMessage;
