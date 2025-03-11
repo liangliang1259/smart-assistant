@@ -39,6 +39,7 @@
             align-items: center;
             font-size: 12px;
             color: #666;
+            cursor: pointer;
         }
         .nav-item.active {
             color: #1677ff;
@@ -49,22 +50,29 @@
         }
         .profile-header {
             background-color: #1677ff;
+            padding: 20px;
             color: white;
-            padding: 24px 16px;
-            border-radius: 0 0 16px 16px;
         }
         .avatar {
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.5);
-            object-fit: cover;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+        }
+        .avatar-icon {
+            font-size: 40px;
+            color: #1677ff;
         }
         .menu-item {
             display: flex;
             align-items: center;
             padding: 16px;
             border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
         }
         .menu-icon {
             width: 24px;
@@ -75,34 +83,37 @@
             margin-right: 12px;
             color: #1677ff;
         }
-        .badge {
-            background-color: #ff4d4f;
-            color: white;
-            border-radius: 10px;
-            padding: 2px 8px;
-            font-size: 12px;
+        .menu-arrow {
+            margin-left: auto;
+            color: #ccc;
         }
-        .stats-item {
+        .stat-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             flex: 1;
+            padding: 12px 0;
+            border-right: 1px solid #f0f0f0;
         }
-        .stats-value {
-            font-size: 20px;
+        .stat-item:last-child {
+            border-right: none;
+        }
+        .stat-value {
+            font-size: 18px;
             font-weight: bold;
+            color: #1677ff;
             margin-bottom: 4px;
         }
-        .stats-label {
+        .stat-label {
             font-size: 12px;
-            color: #999;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <!-- 状态栏 -->
     <div class="status-bar">
-        <div>15:01</div>
+        <div>15:17</div>
         <div>
             <i class="fas fa-signal"></i>
             <i class="fas fa-wifi ml-2"></i>
@@ -113,130 +124,103 @@
     <!-- 个人信息头部 -->
     <div class="profile-header">
         <div class="flex items-center">
-            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" class="avatar">
-            <div class="ml-4">
-                <div class="text-xl font-bold">张小明</div>
-                <div class="text-sm mt-1 opacity-80">电子厂普工 | 2年经验</div>
+            <div class="avatar">
+                <i class="fas fa-user avatar-icon"></i>
             </div>
-        </div>
-        
-        <!-- 数据统计 -->
-        <div class="flex justify-around mt-6">
-            <div class="stats-item">
-                <div class="stats-value">12</div>
-                <div class="stats-label">投递记录</div>
-            </div>
-            <div class="stats-item">
-                <div class="stats-value">5</div>
-                <div class="stats-label">面试邀请</div>
-            </div>
-            <div class="stats-item">
-                <div class="stats-value">8</div>
-                <div class="stats-label">收藏职位</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 我的简历 -->
-    <div class="bg-white rounded-lg mx-4 p-4 -mt-4 shadow-sm relative z-10">
-        <div class="flex justify-between items-center">
             <div>
-                <div class="font-bold">我的简历</div>
-                <div class="text-sm text-gray-500 mt-1">完善度 85%</div>
-            </div>
-            <div class="text-blue-500">
-                <i class="fas fa-edit mr-1"></i> 编辑
-            </div>
-        </div>
-        <div class="mt-3 bg-blue-50 rounded-lg p-3">
-            <div class="text-sm text-blue-600">
-                <i class="fas fa-lightbulb mr-1"></i> 完善个人技能，可提高简历匹配度
+                <div class="text-xl font-bold">张师傅</div>
+                <div class="text-sm opacity-80 mt-1">电工 | 5年经验</div>
+                <div class="mt-2 text-sm bg-white bg-opacity-20 inline-block px-3 py-1 rounded-full">
+                    已认证 <i class="fas fa-check-circle ml-1"></i>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 功能菜单 -->
-    <div class="bg-white rounded-lg mx-4 mt-4 shadow-sm">
-        <div class="menu-item">
+    <!-- 统计数据 -->
+    <div class="bg-white flex mb-3">
+        <div class="stat-item">
+            <div class="stat-value">12</div>
+            <div class="stat-label">投递记录</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">5</div>
+            <div class="stat-label">面试邀请</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">8</div>
+            <div class="stat-label">收藏职位</div>
+        </div>
+    </div>
+
+    <!-- 菜单列表 -->
+    <div class="bg-white mb-3">
+        <div class="menu-item" data-page="application_status.html">
             <div class="menu-icon">
-                <i class="fas fa-briefcase"></i>
+                <i class="fas fa-clipboard-list"></i>
             </div>
-            <div class="flex-1">我的应聘</div>
-            <div class="text-gray-400">
+            <div>应聘进度</div>
+            <div class="menu-arrow">
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
-        
-        <div class="menu-item">
-            <div class="menu-icon">
-                <i class="fas fa-comment-dots"></i>
-            </div>
-            <div class="flex-1">AI沟通记录</div>
-            <div class="badge mr-2">3</div>
-            <div class="text-gray-400">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </div>
-        
         <div class="menu-item">
             <div class="menu-icon">
                 <i class="fas fa-star"></i>
             </div>
-            <div class="flex-1">我的收藏</div>
-            <div class="text-gray-400">
+            <div>收藏职位</div>
+            <div class="menu-arrow">
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
-        
         <div class="menu-item">
             <div class="menu-icon">
-                <i class="fas fa-history"></i>
+                <i class="fas fa-comment-dots"></i>
             </div>
-            <div class="flex-1">浏览记录</div>
-            <div class="text-gray-400">
+            <div>沟通记录</div>
+            <div class="menu-arrow">
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
     </div>
 
-    <!-- 设置菜单 -->
-    <div class="bg-white rounded-lg mx-4 mt-4 shadow-sm">
+    <div class="bg-white mb-3">
         <div class="menu-item">
             <div class="menu-icon">
-                <i class="fas fa-bell"></i>
+                <i class="fas fa-file-alt"></i>
             </div>
-            <div class="flex-1">消息通知</div>
-            <div class="text-gray-400">
+            <div>我的简历</div>
+            <div class="menu-arrow">
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
-        
         <div class="menu-item">
             <div class="menu-icon">
-                <i class="fas fa-shield-alt"></i>
+                <i class="fas fa-certificate"></i>
             </div>
-            <div class="flex-1">隐私设置</div>
-            <div class="text-gray-400">
+            <div>技能认证</div>
+            <div class="menu-arrow">
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
-        
+    </div>
+
+    <div class="bg-white">
         <div class="menu-item">
             <div class="menu-icon">
                 <i class="fas fa-cog"></i>
             </div>
-            <div class="flex-1">系统设置</div>
-            <div class="text-gray-400">
+            <div>设置</div>
+            <div class="menu-arrow">
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
-        
         <div class="menu-item">
             <div class="menu-icon">
-                <i class="fas fa-question-circle"></i>
+                <i class="fas fa-headset"></i>
             </div>
-            <div class="flex-1">帮助与反馈</div>
-            <div class="text-gray-400">
+            <div>帮助与反馈</div>
+            <div class="menu-arrow">
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
@@ -244,22 +228,25 @@
 
     <!-- 底部导航栏 -->
     <div class="nav-bar">
-        <div class="nav-item">
+        <div class="nav-item" data-page="home.html">
             <i class="fas fa-home nav-icon"></i>
             <span>首页</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" data-page="search.html">
             <i class="fas fa-search nav-icon"></i>
             <span>搜索</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" data-page="ai_chat.html">
             <i class="fas fa-comment-dots nav-icon"></i>
             <span>沟通</span>
         </div>
-        <div class="nav-item active">
+        <div class="nav-item active" data-page="profile.html">
             <i class="fas fa-user nav-icon"></i>
             <span>我的</span>
         </div>
     </div>
+
+    <!-- 引入JavaScript -->
+    <script src="js/main.js"></script>
 </body>
 </html>

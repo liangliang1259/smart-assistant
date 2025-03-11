@@ -39,6 +39,7 @@
             align-items: center;
             font-size: 12px;
             color: #666;
+            cursor: pointer;
         }
         .nav-item.active {
             color: #1677ff;
@@ -103,7 +104,7 @@
 <body>
     <!-- 状态栏 -->
     <div class="status-bar">
-        <div>15:01</div>
+        <div>15:17</div>
         <div>
             <i class="fas fa-signal"></i>
             <i class="fas fa-wifi ml-2"></i>
@@ -280,22 +281,25 @@
 
     <!-- 底部导航栏 -->
     <div class="nav-bar">
-        <div class="nav-item">
+        <div class="nav-item" data-page="home.html">
             <i class="fas fa-home nav-icon"></i>
             <span>首页</span>
         </div>
-        <div class="nav-item active">
+        <div class="nav-item active" data-page="search.html">
             <i class="fas fa-search nav-icon"></i>
             <span>搜索</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" data-page="ai_chat.html">
             <i class="fas fa-comment-dots nav-icon"></i>
             <span>沟通</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" data-page="profile.html">
             <i class="fas fa-user nav-icon"></i>
             <span>我的</span>
         </div>
     </div>
+
+    <!-- 引入JavaScript -->
+    <script src="js/main.js"></script>
 </body>
 </html>

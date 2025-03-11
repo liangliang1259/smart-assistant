@@ -72,6 +72,7 @@
             padding: 10px 16px;
             margin-right: 12px;
             background-color: #f5f5f5;
+            cursor: text;
         }
         .send-btn {
             width: 40px;
@@ -82,6 +83,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
         }
         .company-info {
             display: flex;
@@ -132,13 +134,14 @@
             margin-bottom: 8px;
             font-size: 14px;
             color: #333;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <!-- 状态栏 -->
     <div class="status-bar">
-        <div>15:01</div>
+        <div>15:17</div>
         <div>
             <i class="fas fa-signal"></i>
             <i class="fas fa-wifi ml-2"></i>
@@ -149,7 +152,7 @@
     <!-- 头部导航 -->
     <div class="bg-white p-4 sticky top-0 z-10 shadow-sm">
         <div class="flex items-center">
-            <i class="fas fa-arrow-left text-gray-600 mr-4"></i>
+            <i class="fas fa-arrow-left text-gray-600 mr-4 back-button"></i>
             <div class="text-lg font-medium">AI智能沟通助手</div>
         </div>
     </div>
@@ -176,7 +179,7 @@
             <div>
                 <div class="message received">
                     您好！我是富士康的AI招聘助手。看到您对我们的电子厂普工岗位感兴趣，有什么想了解的吗？我可以为您提供岗位详情、薪资福利、工作环境等信息。
-                    <div class="message-time">15:01</div>
+                    <div class="message-time">15:17</div>
                 </div>
                 <div class="quick-replies">
                     <div class="quick-reply">工作内容是什么？</div>
@@ -190,7 +193,7 @@
         <!-- 用户消息 -->
         <div class="message sent">
             工作内容是什么？需要倒班吗？
-            <div class="message-time">15:02</div>
+            <div class="message-time">15:17</div>
         </div>
 
         <!-- AI消息 -->
@@ -203,7 +206,7 @@
                     这个岗位主要负责电子产品的组装、检测和包装工作。根据不同产线安排，可能会有不同的具体任务，如元器件安装、产品组装、质量检验等。
                     <br><br>
                     关于倒班情况：是的，这个岗位需要倒班。我们通常采用两班制（白班8:00-20:00，夜班20:00-8:00）或三班制（早8:00-16:00，中16:00-24:00，晚24:00-8:00），每周轮换一次。倒班会有夜班补贴，夜班补贴为基本工资的20%。
-                    <div class="message-time">15:02</div>
+                    <div class="message-time">15:17</div>
                 </div>
                 <div class="quick-replies">
                     <div class="quick-reply">加班情况如何？</div>
@@ -216,7 +219,7 @@
         <!-- 用户消息 -->
         <div class="message sent">
             住宿条件怎么样？是几人间？有独立卫浴吗？
-            <div class="message-time">15:03</div>
+            <div class="message-time">15:17</div>
         </div>
 
         <!-- AI消息 -->
@@ -231,7 +234,7 @@
                     宿舍区有洗衣房、小超市、食堂和休闲区。如果您希望住条件更好的宿舍，公司也提供2-4人间的优质宿舍，但需要支付一定的住宿费（约200-400元/月）。
                     <br><br>
                     您对这样的住宿条件还满意吗？或者您还有其他问题想了解？
-                    <div class="message-time">15:03</div>
+                    <div class="message-time">15:17</div>
                 </div>
                 <div class="quick-replies">
                     <div class="quick-reply">我想了解入职流程</div>
@@ -249,5 +252,8 @@
             <i class="fas fa-paper-plane"></i>
         </div>
     </div>
+
+    <!-- 引入JavaScript -->
+    <script src="js/main.js"></script>
 </body>
 </html>

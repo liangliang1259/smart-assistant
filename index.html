@@ -10,12 +10,13 @@
         body {
             background-color: #f5f5f7;
             padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         .prototype-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
             justify-content: center;
+            align-items: center;
+            min-height: 90vh;
         }
         .phone-frame {
             width: 375px;
@@ -27,6 +28,19 @@
             position: relative;
             border: 1px solid #e0e0e0;
         }
+        .status-bar {
+            height: 44px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
         .screen {
             width: 100%;
             height: 100%;
@@ -37,6 +51,42 @@
             width: 100%;
             height: 100%;
             border: none;
+        }
+        .bottom-nav {
+            height: 80px;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            cursor: pointer;
+        }
+        .nav-item i {
+            font-size: 24px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+        .nav-item.active i {
+            color: #3b82f6;
+        }
+        .nav-item span {
+            font-size: 12px;
+            color: #666;
+        }
+        .nav-item.active span {
+            color: #3b82f6;
         }
         .screen-title {
             text-align: center;
@@ -52,66 +102,47 @@
         <h1 class="text-3xl font-bold text-center my-8">蓝领招聘App原型</h1>
         
         <div class="prototype-container">
-            <!-- 首页 -->
             <div>
-                <h2 class="screen-title">首页</h2>
+                <h2 class="screen-title">交互原型</h2>
                 <div class="phone-frame">
-                    <div class="screen">
-                        <iframe src="home.html"></iframe>
+                    <div class="status-bar">
+                        <div class="status-left">
+                            <span class="status-time">15:30</span>
+                        </div>
+                        <div class="status-right">
+                            <i class="fas fa-signal"></i>
+                            <i class="fas fa-wifi ml-2"></i>
+                            <i class="fas fa-battery-full ml-2"></i>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- 职位详情页 -->
-            <div>
-                <h2 class="screen-title">职位详情</h2>
-                <div class="phone-frame">
+                    
                     <div class="screen">
-                        <iframe src="job_detail.html"></iframe>
+                        <iframe id="content-frame" src=""></iframe>
                     </div>
-                </div>
-            </div>
-            
-            <!-- AI聊天页 -->
-            <div>
-                <h2 class="screen-title">AI智能沟通</h2>
-                <div class="phone-frame">
-                    <div class="screen">
-                        <iframe src="ai_chat.html"></iframe>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 个人中心 -->
-            <div>
-                <h2 class="screen-title">个人中心</h2>
-                <div class="phone-frame">
-                    <div class="screen">
-                        <iframe src="profile.html"></iframe>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 职位搜索页 -->
-            <div>
-                <h2 class="screen-title">职位搜索</h2>
-                <div class="phone-frame">
-                    <div class="screen">
-                        <iframe src="search.html"></iframe>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 应聘进度页 -->
-            <div>
-                <h2 class="screen-title">应聘进度</h2>
-                <div class="phone-frame">
-                    <div class="screen">
-                        <iframe src="application_status.html"></iframe>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item" data-page="home.html">
+                            <i class="fas fa-home"></i>
+                            <span>首页</span>
+                        </div>
+                        <div class="nav-item" data-page="search.html">
+                            <i class="fas fa-search"></i>
+                            <span>搜索</span>
+                        </div>
+                        <div class="nav-item" data-page="application_status.html">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>应聘</span>
+                        </div>
+                        <div class="nav-item" data-page="profile.html">
+                            <i class="fas fa-user"></i>
+                            <span>我的</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <script src="js/index.js"></script>
 </body>
 </html>
