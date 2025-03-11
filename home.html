@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - 蓝领招聘</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-bottom: 70px;
+        }
+        .status-bar {
+            background-color: #000;
+            color: white;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .nav-item.active {
+            color: #1677ff;
+        }
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        .job-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 16px;
+        }
+        .location-tag {
+            background-color: #f0f7ff;
+            color: #1677ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .salary {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        .category-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-right: 8px;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+        .category-tab.active {
+            background-color: #1677ff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 状态栏 -->
+    <div class="status-bar">
+        <div>15:01</div>
+        <div>
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi ml-2"></i>
+            <i class="fas fa-battery-full ml-2"></i>
+        </div>
+    </div>
+
+    <!-- 头部搜索栏 -->
+    <div class="bg-white p-4 sticky top-0 z-10 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+            <div class="text-xl font-bold">蓝领招聘</div>
+            <div class="flex">
+                <i class="fas fa-bell text-gray-600 mr-4"></i>
+                <i class="fas fa-comment-dots text-gray-600"></i>
+            </div>
+        </div>
+        <div class="bg-gray-100 rounded-full flex items-center px-4 py-2">
+            <i class="fas fa-search text-gray-400 mr-2"></i>
+            <span class="text-gray-400">搜索职位、公司、地点</span>
+        </div>
+    </div>
+
+    <!-- 职位分类标签 -->
+    <div class="bg-white pt-2 pb-3 px-4 mb-3">
+        <div class="overflow-x-auto">
+            <div class="flex">
+                <div class="category-tab active">推荐</div>
+                <div class="category-tab">工厂</div>
+                <div class="category-tab">物流</div>
+                <div class="category-tab">建筑</div>
+                <div class="category-tab">餐饮</div>
+                <div class="category-tab">零售</div>
+                <div class="category-tab">服务</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 职位列表 -->
+    <div class="px-4">
+        <!-- 职位卡片1 -->
+        <div class="job-card bg-white p-4">
+            <div class="flex justify-between items-start">
+                <div>
+                    <div class="text-lg font-medium">电子厂普工</div>
+                    <div class="flex items-center mt-1">
+                        <span class="location-tag mr-2">深圳·宝安区</span>
+                        <span class="text-gray-500 text-sm">1-3年</span>
+                    </div>
+                </div>
+                <div class="salary">6000-8000元/月</div>
+            </div>
+            <div class="flex items-center justify-between mt-4">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="company-logo">
+                    <div class="ml-3">
+                        <div class="font-medium">富士康科技集团</div>
+                        <div class="text-gray-500 text-sm">电子制造 | 10000人以上</div>
+                    </div>
+                </div>
+                <div class="text-blue-500">
+                    <i class="fas fa-comment-dots"></i>
+                    <span class="ml-1">AI沟通</span>
+                </div>
+            </div>
+            <div class="mt-3 text-sm text-gray-600">
+                <span class="bg-gray-100 rounded px-2 py-1 mr-2">五险一金</span>
+                <span class="bg-gray-100 rounded px-2 py-1 mr-2">包吃住</span>
+                <span class="bg-gray-100 rounded px-2 py-1">加班费</span>
+            </div>
+        </div>
+
+        <!-- 职位卡片2 -->
+        <div class="job-card bg-white p-4">
+            <div class="flex justify-between items-start">
+                <div>
+                    <div class="text-lg font-medium">物流仓储员</div>
+                    <div class="flex items-center mt-1">
+                        <span class="location-tag mr-2">广州·白云区</span>
+                        <span class="text-gray-500 text-sm">经验不限</span>
+                    </div>
+                </div>
+                <div class="salary">5500-7000元/月</div>
+            </div>
+            <div class="flex items-center justify-between mt-4">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="company-logo">
+                    <div class="ml-3">
+                        <div class="font-medium">京东物流</div>
+                        <div class="text-gray-500 text-sm">物流仓储 | 5000人以上</div>
+                    </div>
+                </div>
+                <div class="text-blue-500">
+                    <i class="fas fa-comment-dots"></i>
+                    <span class="ml-1">AI沟通</span>
+                </div>
+            </div>
+            <div class="mt-3 text-sm text-gray-600">
+                <span class="bg-gray-100 rounded px-2 py-1 mr-2">五险</span>
+                <span class="bg-gray-100 rounded px-2 py-1 mr-2">包住</span>
+                <span class="bg-gray-100 rounded px-2 py-1">年终奖</span>
+            </div>
+        </div>
+
+        <!-- 职位卡片3 -->
+        <div class="job-card bg-white p-4">
+            <div class="flex justify-between items-start">
+                <div>
+                    <div class="text-lg font-medium">建筑木工</div>
+                    <div class="flex items-center mt-1">
+                        <span class="location-tag mr-2">东莞·长安镇</span>
+                        <span class="text-gray-500 text-sm">3-5年</span>
+                    </div>
+                </div>
+                <div class="salary">9000-12000元/月</div>
+            </div>
+            <div class="flex items-center justify-between mt-4">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="company-logo">
+                    <div class="ml-3">
+                        <div class="font-medium">中建三局</div>
+                        <div class="text-gray-500 text-sm">建筑工程 | 1000-5000人</div>
+                    </div>
+                </div>
+                <div class="text-blue-500">
+                    <i class="fas fa-comment-dots"></i>
+                    <span class="ml-1">AI沟通</span>
+                </div>
+            </div>
+            <div class="mt-3 text-sm text-gray-600">
+                <span class="bg-gray-100 rounded px-2 py-1 mr-2">高薪</span>
+                <span class="bg-gray-100 rounded px-2 py-1 mr-2">包吃住</span>
+                <span class="bg-gray-100 rounded px-2 py-1">工伤险</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span>首页</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-search nav-icon"></i>
+            <span>搜索</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-comment-dots nav-icon"></i>
+            <span>沟通</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span>我的</span>
+        </div>
+    </div>
+</body>
+</html>

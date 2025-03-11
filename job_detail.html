@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职位详情 - 蓝领招聘</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-bottom: 70px;
+        }
+        .status-bar {
+            background-color: #000;
+            color: white;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .nav-item.active {
+            color: #1677ff;
+        }
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .salary {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 12px;
+        }
+        .section-title:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 3px;
+            height: 16px;
+            width: 4px;
+            background-color: #1677ff;
+            border-radius: 2px;
+        }
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            padding: 12px 16px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+        .action-btn {
+            flex: 1;
+            border-radius: 8px;
+            padding: 12px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        .collect-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            margin-right: 12px;
+        }
+        .collect-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- 状态栏 -->
+    <div class="status-bar">
+        <div>15:01</div>
+        <div>
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi ml-2"></i>
+            <i class="fas fa-battery-full ml-2"></i>
+        </div>
+    </div>
+
+    <!-- 头部导航 -->
+    <div class="bg-white p-4 sticky top-0 z-10 shadow-sm">
+        <div class="flex items-center">
+            <i class="fas fa-arrow-left text-gray-600 mr-4"></i>
+            <div class="text-lg font-medium">职位详情</div>
+        </div>
+    </div>
+
+    <!-- 职位信息卡片 -->
+    <div class="bg-white p-4 mb-3">
+        <div class="flex justify-between items-start">
+            <div>
+                <div class="text-xl font-bold">电子厂普工</div>
+                <div class="salary mt-2">6000-8000元/月</div>
+            </div>
+            <div class="collect-btn">
+                <i class="far fa-star collect-icon"></i>
+                <span>收藏</span>
+            </div>
+        </div>
+        <div class="flex items-center mt-3 text-sm text-gray-600">
+            <div class="mr-3"><i class="fas fa-map-marker-alt mr-1"></i> 深圳·宝安区</div>
+            <div class="mr-3"><i class="fas fa-briefcase mr-1"></i> 1-3年</div>
+            <div><i class="fas fa-graduation-cap mr-1"></i> 初中及以上</div>
+        </div>
+        <div class="mt-3">
+            <span class="bg-gray-100 rounded px-2 py-1 mr-2 text-sm">五险一金</span>
+            <span class="bg-gray-100 rounded px-2 py-1 mr-2 text-sm">包吃住</span>
+            <span class="bg-gray-100 rounded px-2 py-1 mr-2 text-sm">加班费</span>
+            <span class="bg-gray-100 rounded px-2 py-1 text-sm">年终奖</span>
+        </div>
+    </div>
+
+    <!-- 公司信息 -->
+    <div class="bg-white p-4 mb-3">
+        <div class="flex items-center">
+            <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="company-logo">
+            <div class="ml-3">
+                <div class="font-bold text-lg">富士康科技集团</div>
+                <div class="text-gray-600 mt-1">电子制造 | 10000人以上</div>
+                <div class="text-gray-600 mt-1">深圳市宝安区福永街道</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 职位描述 -->
+    <div class="bg-white p-4 mb-3">
+        <div class="section-title">职位描述</div>
+        <div class="text-gray-700">
+            <p class="mb-2">【岗位职责】</p>
+            <p class="mb-2">1. 负责电子产品的组装、检测、包装等工作；</p>
+            <p class="mb-2">2. 按照生产计划和工艺要求完成生产任务；</p>
+            <p class="mb-2">3. 保证产品质量，做好生产记录；</p>
+            <p class="mb-2">4. 维护保养设备，保持工作区域整洁。</p>
+            
+            <p class="mt-4 mb-2">【任职要求】</p>
+            <p class="mb-2">1. 初中及以上学历，年龄18-45周岁；</p>
+            <p class="mb-2">2. 有电子厂工作经验优先；</p>
+            <p class="mb-2">3. 能适应站立工作和倒班；</p>
+            <p class="mb-2">4. 有责任心，做事认真细致。</p>
+            
+            <p class="mt-4 mb-2">【薪资福利】</p>
+            <p class="mb-2">1. 底薪4000元+绩效奖金+加班费；</p>
+            <p class="mb-2">2. 提供免费住宿，有补贴的员工餐厅；</p>
+            <p class="mb-2">3. 购买五险一金，节日福利；</p>
+            <p class="mb-2">4. 定期组织文体活动，有晋升空间。</p>
+        </div>
+    </div>
+
+    <!-- 工作地点 -->
+    <div class="bg-white p-4 mb-3">
+        <div class="section-title">工作地点</div>
+        <div class="text-gray-700">
+            <p>深圳市宝安区福永街道凤凰工业园区富士康科技园</p>
+            <div class="mt-3 bg-gray-100 h-40 rounded-lg flex items-center justify-center">
+                <i class="fas fa-map-marked-alt text-gray-400 text-4xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部操作栏 -->
+    <div class="bottom-actions">
+        <div class="action-btn bg-blue-100 text-blue-600 mr-3">
+            投递简历
+        </div>
+        <div class="action-btn bg-blue-600 text-white">
+            <i class="fas fa-comment-dots mr-1"></i> AI智能沟通
+        </div>
+    </div>
+</body>
+</html>
