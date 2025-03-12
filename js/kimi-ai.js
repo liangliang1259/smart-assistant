@@ -46,10 +46,20 @@ function initKimiChat() {
     });
     
     // 快速回复点击事件
-    document.addEventListener('click', function(e) {
+    chatContainer.addEventListener('click', function(e) {
+        // 处理快速回复点击
         if (e.target.classList.contains('quick-reply')) {
-            const message = e.target.textContent;
-            sendUserMessage(message);
+            const replyText = e.target.textContent;
+            console.log("点击了快速回复:", replyText);
+            
+            // 尝试使用ai-search.js中的handleQuickReplyClick函数处理
+            if (window.handleQuickReplyClick && window.handleQuickReplyClick(replyText)) {
+                console.log("快速回复已被handleQuickReplyClick处理");
+                return;
+            }
+            
+            // 如果没有被特殊处理，则作为普通消息发送
+            sendUserMessage(replyText);
         }
     });
     
