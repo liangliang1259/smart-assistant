@@ -208,6 +208,8 @@ function processMessageWithKimi(message) {
 
 // 显示AI回复
 function showAIReply(message, quickReplies = []) {
+    console.log("执行kimi调用:");
+
     const chatContainer = document.getElementById('chat-container');
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
