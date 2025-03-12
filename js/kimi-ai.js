@@ -156,10 +156,21 @@ function processMessageWithKimi(message) {
     // 获取当前职位上下文
     const urlParams = new URLSearchParams(window.location.search);
     const jobId = urlParams.get('jobId');
+    console.log("当前URL参数中的jobId:", jobId);
+    console.log("window.jobsData是否存在:", !!window.jobsData);
+    if (window.jobsData) {
+        console.log("jobsData长度:", window.jobsData.length);
+    }
+    
     let jobContext = "";
     
     if (jobId && window.jobsData) {
-        const job = window.jobsData.find(j => j.id === parseInt(jobId));
+        const parsedJobId = parseInt(jobId);
+        console.log("解析后的jobId:", parsedJobId);
+        
+        const job = window.jobsData.find(j => j.id === parsedJobId);
+        console.log("找到的职位:", job);
+        
         if (job) {
             jobContext = `用户正在咨询的职位信息：
 职位名称: ${job.title}
@@ -168,6 +179,7 @@ function processMessageWithKimi(message) {
 薪资: ${job.salary}
 要求: ${job.requirements}
 福利: ${job.benefits}`;
+            console.log("生成的职位上下文:", jobContext);
         }
     }
     

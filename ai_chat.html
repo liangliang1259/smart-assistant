@@ -272,8 +272,6 @@
     </div>
 
     <!-- 引入JavaScript -->
-    <script src="js/kimi-ai.js"></script>
-
     <script>
         // 确保页面完全加载后执行
         document.addEventListener('DOMContentLoaded', function() {
@@ -527,7 +525,7 @@
                 const jobId = urlParams.get('jobId');
                 
                 if (jobId && window.jobsData) {
-                    const job = window.jobsData.find(j => j.id === jobId);
+                    const job = window.jobsData.find(j => j.id === parseInt(jobId));
                     if (job) {
                         jobInfoContainer.innerHTML = `
                             <div class="company-info">
@@ -549,28 +547,67 @@
             
             // 显示欢迎消息
             function displayWelcomeMessage() {
+                // 获取当前职位上下文
                 const urlParams = new URLSearchParams(window.location.search);
                 const jobId = urlParams.get('jobId');
-                let welcomeMessage = '';
-                let quickReplies = [];
+                console.log("欢迎消息中获取到的jobId:", jobId);
+                console.log("jobsData是否存在:", !!window.jobsData);
+                if (window.jobsData) {
+                    console.log("jobsData长度:", window.jobsData.length);
+                }
+                
+                let welcomeMessage = "您好！我是蓝领招聘的AI助手，由Kimi提供智能支持。我可以帮您找工作、解答问题，请问有什么可以帮您的吗？";
+                let quickReplies = ["热门职位推荐", "如何准备面试", "薪资行情如何", "求职技巧分享"];
                 
                 if (jobId && window.jobsData) {
-                    const job = window.jobsData.find(j => j.id === jobId);
+                    const parsedJobId = parseInt(jobId);
+                    console.log("欢迎消息中解析后的jobId:", parsedJobId);
+                    
+                    const job = window.jobsData.find(j => j.id === parsedJobId);
+                    console.log("欢迎消息中找到的职位:", job);
+                    
                     if (job) {
                         welcomeMessage = `您好！我是${job.company}的AI招聘助手，由Kimi提供智能支持。看到您对我们的${job.title}岗位感兴趣，有什么想了解的吗？我可以为您提供岗位详情、薪资福利、工作环境等信息。`;
                         quickReplies = ["工作内容是什么？", "薪资怎么算？", "需要什么条件？", "有什么福利？"];
-                    } else {
-                        welcomeMessage = "您好！我是蓝领招聘的AI助手，由Kimi提供智能支持。请问您想了解哪些职位信息或者有什么求职问题需要咨询？";
-                        quickReplies = ["热门职位推荐", "如何准备面试", "薪资行情如何", "求职技巧分享"];
                     }
-                } else {
-                    welcomeMessage = "您好！我是蓝领招聘的AI助手，由Kimi提供智能支持。请问您想了解哪些职位信息或者有什么求职问题需要咨询？";
-                    quickReplies = ["热门职位推荐", "如何准备面试", "薪资行情如何", "求职技巧分享"];
                 }
                 
                 // 使用kimi-ai.js中的showAIReply函数
-                if (typeof showAIReply === 'function') {
-                    showAIReply(welcomeMessage, quickReplies);
+                if (typeof window.showAIReply === 'function') {
+                    window.showAIReply(welcomeMessage, quickReplies);
+                } else {
+                    console.error("showAIReply函数未找到");
+                    // 备用方案：直接在页面上显示消息
+                    const chatContainer = document.getElementById('chat-container');
+                    const now = new Date();
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    const timeString = `${hours}:${minutes}`;
+                    
+                    // 创建AI消息元素
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message received';
+                    messageElement.innerHTML = `
+                        ${welcomeMessage}
+                        <div class="message-time">${timeString}</div>
+                    `;
+                    
+                    // 添加到聊天容器
+                    chatContainer.appendChild(messageElement);
+                    
+                    // 显示快速回复选项
+                    const quickRepliesContainer = document.createElement('div');
+                    quickRepliesContainer.className = 'quick-replies';
+                    
+                    quickReplies.forEach(reply => {
+                        const quickReplyElement = document.createElement('div');
+                        quickReplyElement.className = 'quick-reply';
+                        quickReplyElement.textContent = reply;
+                        quickRepliesContainer.appendChild(quickReplyElement);
+                    });
+                    
+                    chatContainer.appendChild(quickRepliesContainer);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
                 }
             }
         });
