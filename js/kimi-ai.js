@@ -153,12 +153,6 @@ function removeTypingIndicator() {
 
 // 处理消息并调用 Kimi AI
 function processMessageWithKimi(message) {
-    // 首先显示用户消息
-    sendUserMessage(message);
-    
-    // 显示 AI 正在输入的状态
-    showTypingIndicator();
-    
     // 获取当前职位上下文
     const urlParams = new URLSearchParams(window.location.search);
     const jobId = urlParams.get('jobId');
@@ -177,8 +171,8 @@ function processMessageWithKimi(message) {
         }
     }
     
-    // 调用 Kimi API
-    callKimiAPI(message, jobContext)
+    // 使用ai-search.js中的callKimiAPI函数
+    window.callKimiAPI(message, jobContext)
         .then(response => {
             // 移除输入指示器
             removeTypingIndicator();
@@ -187,10 +181,16 @@ function processMessageWithKimi(message) {
                 const aiMessage = response.choices[0].message.content;
                 
                 // 生成快速回复选项
-                const quickReplies = generateQuickRepliesBasedOnContext(message, aiMessage);
+                const quickReplies = window.generateQuickRepliesBasedOnContext(message, aiMessage);
                 
                 // 显示 AI 回复
                 showAIReply(aiMessage, quickReplies);
+                
+                // 如果有匹配的职位，可以在这里处理
+                if (response.matchedJobs && response.matchedJobs.length > 0) {
+                    console.log("找到匹配的职位:", response.matchedJobs.length);
+                    // 这里可以添加额外的UI处理，比如显示匹配的职位卡片等
+                }
             }
         })
         .catch(error => {
@@ -199,136 +199,11 @@ function processMessageWithKimi(message) {
             
             // 降级到本地回复逻辑
             const intent = analyzeMessageIntent(message);
-            const reply = generateReplyBasedOnIntent(intent, message);
-            showAIReply(reply.message, reply.quickReplies);
+            const fallbackReply = generateReplyBasedOnIntent(intent, message);
+            
+            // 显示降级回复
+            showAIReply(fallbackReply);
         });
-}
-
-// 调用Kimi API
-async function callKimiAPI(userMessage, contextInfo = "") {
-    try {
-        // 构建消息历史，最多包含最近5条消息
-        const recentMessages = chatHistory.slice(-5);
-        
-        // 构建系统消息
-        const systemMessage = {
-            role: "system",
-            content: `你是Kimi，一个专业的蓝领招聘顾问AI助手。你的任务是帮助求职者了解职位信息、解答求职问题，并提供专业的就业建议。
-请使用友好、专业的语气回答问题，回答要简洁明了，避免过长的回复。
-如果你不确定某个具体信息，请诚实地表明，并提供可能的解决方案或建议用户联系招聘人员。
-以下是当前用户咨询的职位背景信息，请根据这些信息回答用户的问题：
-${contextInfo}`
-        };
-        
-        // 构建完整消息数组
-        const messages = [systemMessage, ...recentMessages];
-        
-        // 如果当前消息不在历史记录中，添加它
-        if (!recentMessages.some(msg => msg.role === "user" && msg.content === userMessage)) {
-            messages.push({
-                role: "user",
-                content: userMessage
-            });
-        }
-        
-        // 构建请求体
-        const requestBody = {
-            model: KIMI_API_CONFIG.MODEL,
-            messages: messages,
-            temperature: 0.7,
-            max_tokens: 800
-        };
-        
-        // 检查是否在开发环境
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            console.log("开发环境: 模拟Kimi API调用", requestBody);
-            // 返回模拟数据
-            return mockKimiAPIResponse(userMessage);
-        }
-        
-        // 发送API请求
-        const response = await fetch(KIMI_API_CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${KIMI_API_CONFIG.API_KEY}`
-            },
-            body: JSON.stringify(requestBody)
-        });
-        
-        // 检查响应状态
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error("Kimi API错误:", errorData);
-            throw new Error(`API请求失败: ${response.status}`);
-        }
-        
-        // 解析响应
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("调用Kimi API时出错:", error);
-        throw error;
-    }
-}
-
-// 模拟Kimi API响应（用于开发环境）
-function mockKimiAPIResponse(userMessage) {
-    // 分析消息意图
-    const intent = analyzeMessageIntent(userMessage);
-    
-    // 根据意图生成回复
-    const reply = generateReplyBasedOnIntent(intent, userMessage);
-    
-    // 构建模拟API响应
-    return {
-        id: "mock-response-" + Date.now(),
-        object: "chat.completion",
-        created: Math.floor(Date.now() / 1000),
-        model: KIMI_API_CONFIG.MODEL,
-        choices: [
-            {
-                index: 0,
-                message: {
-                    role: "assistant",
-                    content: reply.message
-                },
-                finish_reason: "stop"
-            }
-        ],
-        usage: {
-            prompt_tokens: userMessage.length,
-            completion_tokens: reply.message.length,
-            total_tokens: userMessage.length + reply.message.length
-        }
-    };
-}
-
-// 根据上下文生成快速回复选项
-function generateQuickRepliesBasedOnContext(userMessage, aiResponse) {
-    // 默认快速回复选项
-    let defaultReplies = ["了解更多", "谢谢", "还有其他问题"];
-    
-    // 根据AI回复内容生成相关问题
-    if (aiResponse.includes("薪资") || aiResponse.includes("工资")) {
-        defaultReplies.push("有什么福利？");
-    }
-    
-    if (aiResponse.includes("工作时间") || aiResponse.includes("班次")) {
-        defaultReplies.push("需要加班吗？");
-    }
-    
-    if (aiResponse.includes("住宿") || aiResponse.includes("宿舍")) {
-        defaultReplies.push("伙食怎么样？");
-    }
-    
-    if (aiResponse.includes("面试") || aiResponse.includes("入职")) {
-        defaultReplies.push("需要准备什么材料？");
-    }
-    
-    // 随机选择3-4个选项
-    const shuffled = defaultReplies.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, Math.min(4, shuffled.length));
 }
 
 // 显示AI回复
