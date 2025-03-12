@@ -54,8 +54,7 @@ function searchJobsByKeyword(query) {
         if (matchedJobs.length > 3) {
             response += `还有${matchedJobs.length - 3}个相关职位未显示，您可以在首页搜索"${query}"查看更多结果。\n\n`;
         }
-        
-        response += '您对这些职位有什么想了解的吗？例如薪资待遇、工作要求、公司环境等，您也可以点击下方的“查看职位详情”按钮查看完整信息。';
+        response += '您对这些职位有什么想了解的吗？例如薪资待遇、工作要求、公司环境等。';
     } else {
         response = `抱歉，我没有找到与"${query}"相关的职位。您可以尝试其他关键词，如"普工"、"包吃住"、"高薪"等。`;
     }

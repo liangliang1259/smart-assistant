@@ -253,27 +253,78 @@ function showAIReply(message, quickReplies = []) {
     // 创建消息元素
     const messageElement = document.createElement('div');
     messageElement.className = 'message received';
+    
+    // 将回车符转换为HTML换行
+    const formattedMessage = message.replace(/\n/g, '<br>');
+    
     messageElement.innerHTML = `
-        ${message}
+        ${formattedMessage}
         <div class="message-time">${timeString}</div>
     `;
     
     // 添加到内容容器
     contentContainer.appendChild(messageElement);
     
+    // 如果有匹配的职位，添加"查看职位详情"按钮
+    if (window.lastMatchedJobs && window.lastMatchedJobs.length > 0) {
+        const jobButtonContainer = document.createElement('div');
+        jobButtonContainer.className = 'job-button-container';
+        jobButtonContainer.style.marginTop = '10px';
+        jobButtonContainer.style.marginBottom = '10px';
+        jobButtonContainer.style.display = 'flex';
+        jobButtonContainer.style.justifyContent = 'center';
+        
+        const jobButton = document.createElement('button');
+        jobButton.className = 'job-detail-button';
+        jobButton.textContent = '查看职位详情';
+        jobButton.style.backgroundColor = '#1677ff';
+        jobButton.style.color = 'white';
+        jobButton.style.border = 'none';
+        jobButton.style.borderRadius = '20px';
+        jobButton.style.padding = '8px 16px';
+        jobButton.style.fontSize = '14px';
+        jobButton.style.fontWeight = 'bold';
+        jobButton.style.cursor = 'pointer';
+        jobButton.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+        
+        // 添加点击事件
+        jobButton.addEventListener('click', function() {
+            if (window.lastMatchedJobs.length > 1) {
+                // 如果有多个匹配的职位，显示职位选择对话框
+                if (typeof window.showJobSelectionDialog === 'function') {
+                    window.showJobSelectionDialog(window.lastMatchedJobs);
+                }
+            } else {
+                // 如果只有一个匹配的职位，直接跳转到详情页面
+                const firstJob = window.lastMatchedJobs[0];
+                window.location.href = `job_detail.html?jobId=${firstJob.id}`;
+            }
+        });
+        
+        jobButtonContainer.appendChild(jobButton);
+        contentContainer.appendChild(jobButtonContainer);
+    }
+    
     // 如果有快速回复选项，添加它们
     if (quickReplies && quickReplies.length > 0) {
         const quickRepliesContainer = document.createElement('div');
         quickRepliesContainer.className = 'quick-replies';
         
+        // 为每个快速回复创建元素
         quickReplies.forEach(reply => {
+            // 跳过"查看职位详情"选项，因为我们已经添加了按钮
+            if (reply === '查看职位详情') return;
+            
             const quickReplyElement = document.createElement('div');
             quickReplyElement.className = 'quick-reply';
             quickReplyElement.textContent = reply;
             quickRepliesContainer.appendChild(quickReplyElement);
         });
         
-        contentContainer.appendChild(quickRepliesContainer);
+        // 只有当有其他快速回复选项时才添加到聊天容器
+        if (quickRepliesContainer.children.length > 0) {
+            contentContainer.appendChild(quickRepliesContainer);
+        }
     }
     
     // 组装消息
