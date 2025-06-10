@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>简历优化 - AI面试助手</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="js/resume.js"></script>
     <style>
         ::-webkit-scrollbar {
             display: none;
@@ -113,9 +114,11 @@
                         </div>
                         <h3 class="font-semibold text-gray-800 mb-2">上传你的简历</h3>
                         <p class="text-gray-600 text-sm mb-4">支持 PDF、Word 格式文件</p>
-                        <button class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
-                            选择文件
-                        </button>
+                                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx" class="hidden" onchange="handleFileUpload(event)">
+            <button id="uploadButton" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700" onclick="document.getElementById('fileInput').click()">
+                选择文件
+            </button>
+            <p id="uploadStatus" class="text-sm text-gray-500 mt-2"></p>
                     </div>
                 </div>
 
@@ -124,34 +127,34 @@
                     <div class="score-card h-full">
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="font-semibold text-gray-800">简历评分</h3>
-                            <span class="text-3xl font-bold text-indigo-600">85</span>
+                            <span id="totalScore" class="text-3xl font-bold text-indigo-600">85</span>
                         </div>
                         <div class="space-y-6">
                             <div>
                                 <div class="flex justify-between text-sm mb-1">
                                     <span>内容完整度</span>
-                                    <span class="text-indigo-600">90%</span>
+                                    <span id="contentScore" class="text-indigo-600">90%</span>
                                 </div>
                                 <div class="h-2 bg-gray-200 rounded-full">
-                                    <div class="h-2 bg-indigo-600 rounded-full" style="width: 90%"></div>
+                                    <div id="contentProgress" class="h-2 bg-indigo-600 rounded-full" style="width: 90%"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex justify-between text-sm mb-1">
                                     <span>专业相关度</span>
-                                    <span class="text-indigo-600">85%</span>
+                                    <span id="professionalScore" class="text-indigo-600">85%</span>
                                 </div>
                                 <div class="h-2 bg-gray-200 rounded-full">
-                                    <div class="h-2 bg-indigo-600 rounded-full" style="width: 85%"></div>
+                                    <div id="professionalProgress" class="h-2 bg-indigo-600 rounded-full" style="width: 85%"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex justify-between text-sm mb-1">
                                     <span>关键词匹配度</span>
-                                    <span class="text-indigo-600">80%</span>
+                                    <span id="keywordScore" class="text-indigo-600">80%</span>
                                 </div>
                                 <div class="h-2 bg-gray-200 rounded-full">
-                                    <div class="h-2 bg-indigo-600 rounded-full" style="width: 80%"></div>
+                                    <div id="keywordProgress" class="h-2 bg-indigo-600 rounded-full" style="width: 80%"></div>
                                 </div>
                             </div>
                         </div>
@@ -160,8 +163,8 @@
 
                 <!-- 右侧：优化建议 -->
                 <div class="col-span-1">
-                    <div class="space-y-4">
-                        <h3 class="font-semibold text-gray-800 mb-4">优化建议</h3>
+                                    <div id="suggestionsContainer" class="space-y-4">
+                    <h3 class="font-semibold text-gray-800 mb-4">优化建议</h3>
                         <div class="bg-white p-4 rounded-lg">
                             <div class="flex items-start">
                                 <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-3 mt-1">
