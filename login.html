@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - AI面试助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f6f8fd 0%, #ffffff 100%);
+        }
+        .login-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .login-form {
+            width: 400px;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .login-banner {
+            flex: 1;
+            max-width: 600px;
+            margin-right: 80px;
+        }
+        .input-field {
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid #E5E7EB;
+            padding: 0 16px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .input-field:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+        }
+        .login-btn {
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+            font-weight: 600;
+            margin-top: 24px;
+            transition: all 0.3s;
+        }
+        .login-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <div class="login-container">
+        <div class="login-banner">
+            <h1 class="text-4xl font-bold text-gray-900 mb-6">AI面试助手</h1>
+            <p class="text-xl text-gray-600 mb-8">你的专业面试训练营，助你成为更好的开发者</p>
+            <div class="space-y-6">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">智能简历优化</h3>
+                        <p class="text-gray-600">AI助手帮你打造完美简历</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">海量面试题库</h3>
+                        <p class="text-gray-600">覆盖各类技术岗位面试题</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">模拟面试训练</h3>
+                        <p class="text-gray-600">AI面试官实时互动</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-form">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">欢迎回来</h2>
+                <p class="text-gray-600 mt-2">登录你的AI面试助手账号</p>
+            </div>
+
+            <form>
+                <input type="email" class="input-field" placeholder="邮箱地址" required>
+                <input type="password" class="input-field" placeholder="密码" required>
+                
+                <div class="flex justify-between items-center mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2">
+                        <span class="text-sm text-gray-600">记住我</span>
+                    </label>
+                    <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800">忘记密码？</a>
+                </div>
+
+                <button type="submit" class="login-btn hover:bg-indigo-700">登录</button>
+
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        还没有账号？
+                        <a href="register.html" class="text-indigo-600 hover:text-indigo-800 font-medium">立即注册</a>
+                    </p>
+                </div>
+
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-200"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">或</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button type="button" class="w-full h-12 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-50">
+                            <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            使用 GitHub 登录
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 

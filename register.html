@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - AI面试助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f6f8fd 0%, #ffffff 100%);
+        }
+        .register-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .register-form {
+            width: 480px;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .register-banner {
+            flex: 1;
+            max-width: 600px;
+            margin-right: 80px;
+        }
+        .input-field {
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid #E5E7EB;
+            padding: 0 16px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .input-field:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+        }
+        .register-btn {
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+            font-weight: 600;
+            margin-top: 24px;
+            transition: all 0.3s;
+        }
+        .register-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+        }
+        .verification-code {
+            display: flex;
+            gap: 12px;
+        }
+        .code-btn {
+            width: 120px;
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid #4F46E5;
+            color: #4F46E5;
+            font-weight: 500;
+            background: transparent;
+            transition: all 0.3s;
+        }
+        .code-btn:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+        .feature-card {
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <div class="register-container">
+        <div class="register-banner">
+            <h1 class="text-4xl font-bold text-gray-900 mb-6">开启你的面试之旅</h1>
+            <p class="text-xl text-gray-600 mb-12">加入AI面试助手，提升你的面试竞争力</p>
+
+            <div class="space-y-6">
+                <div class="feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">快速上手</h3>
+                            <p class="text-gray-600">简单注册即可开始训练</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">我们提供直观的用户界面和完整的新手引导，帮助你快速开始面试训练。</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">专业服务</h3>
+                            <p class="text-gray-600">量身定制的训练计划</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">根据你的技术栈和目标岗位，为你制定个性化的面试训练方案。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="register-form">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">创建账号</h2>
+                <p class="text-gray-600 mt-2">开始你的AI面试助手之旅</p>
+            </div>
+
+            <form>
+                <input type="text" class="input-field" placeholder="用户名" required>
+                <input type="email" class="input-field" placeholder="邮箱地址" required>
+                
+                <div class="verification-code">
+                    <input type="text" class="input-field mb-0" placeholder="验证码" required>
+                    <button type="button" class="code-btn">获取验证码</button>
+                </div>
+
+                <input type="password" class="input-field" placeholder="设置密码" required>
+                <input type="password" class="input-field" placeholder="确认密码" required>
+                
+                <div class="flex items-start mb-6">
+                    <input type="checkbox" class="mt-1 mr-2" required>
+                    <span class="text-sm text-gray-600">
+                        我已阅读并同意
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800">用户协议</a>
+                        和
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800">隐私政策</a>
+                    </span>
+                </div>
+                
+                <button type="submit" class="register-btn">注册</button>
+                
+                <p class="text-sm text-gray-600 text-center mt-6">
+                    已有账号？
+                    <a href="login.html" class="text-indigo-600 hover:text-indigo-800 font-medium">立即登录</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 
