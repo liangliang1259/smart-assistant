@@ -228,4 +228,25 @@ function addEducationItem() {
 function deleteItem(button) {
     const item = button.closest('.item');
     item.remove();
-} 
+}
+
+// 页面导航
+function initNavigation() {
+    // 获取当前页面路径
+    const currentPath = window.location.pathname;
+    
+    // 更新导航项的激活状态
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const href = item.getAttribute('href');
+        if (currentPath.endsWith(href)) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+}
+
+// 页面加载完成后初始化导航
+document.addEventListener('DOMContentLoaded', function() {
+    initNavigation();
+}); 
